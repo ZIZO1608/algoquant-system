@@ -1,0 +1,209 @@
+/* Employee wallets — page layout only. Shared primitives (cards, badges,
+   amounts, tables, modals) come from tokens.css and component stylesheets. */
+
+.wallet-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+/* ---------- Hero balance card ---------- */
+
+.wallet-balance-card {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--s-4);
+  padding: 28px;
+  background: var(--brand-900);
+  border-color: var(--brand-900);
+  color: var(--sidebar-ink-strong);
+}
+
+.wallet-balance-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--brand-500) 45%, transparent), transparent 45%),
+    radial-gradient(circle at 92% 90%, color-mix(in srgb, var(--brand-500) 22%, transparent), transparent 40%);
+}
+
+/* Gradient positions are physical: mirror the glow so it keeps its place
+   relative to the content in the English (LTR) layout. */
+:root[dir='ltr'] .wallet-balance-glow {
+  background:
+    radial-gradient(circle at 88% 20%, color-mix(in srgb, var(--brand-500) 45%, transparent), transparent 45%),
+    radial-gradient(circle at 8% 90%, color-mix(in srgb, var(--brand-500) 22%, transparent), transparent 40%);
+}
+
+.wallet-balance-main {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.wallet-balance-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--r-lg);
+  background: color-mix(in srgb, var(--brand-500) 22%, transparent);
+  color: var(--brand-500);
+  flex-shrink: 0;
+}
+
+.wallet-balance-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.wallet-balance-label {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--sidebar-ink);
+}
+
+.wallet-balance-value {
+  font-family: var(--font-head);
+  font-size: clamp(28px, 4vw, 38px);
+  font-weight: 800;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.wallet-balance-meta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: var(--fs-sm);
+  color: var(--sidebar-ink);
+}
+
+.wallet-balance-card .badge {
+  background: color-mix(in srgb, var(--sidebar-ink-strong) 14%, transparent);
+  color: var(--sidebar-ink-strong);
+}
+
+.wallet-balance-salary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wallet-balance-salary strong {
+  color: var(--sidebar-ink-strong);
+  font-weight: 700;
+}
+
+/* ---------- Flush card with a padded title row above a full-bleed table ---------- */
+
+.wallet-table-card .card-header-row {
+  padding: 18px 24px 0;
+  margin-bottom: 14px;
+}
+
+.wallet-table-card .data-table th:first-child,
+.wallet-table-card .data-table th:last-child {
+  border-radius: 0;
+}
+
+.wallet-table-card .empty-block {
+  margin: 0 24px 24px;
+}
+
+/* ---------- Wallet detail modal ---------- */
+
+.wallet-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.wallet-detail-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--s-6);
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+}
+
+.wallet-detail-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.wallet-detail-label {
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.wallet-detail-value {
+  font-family: var(--font-head);
+  font-size: var(--fs-xl);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.wallet-detail-heading {
+  font-size: var(--fs-base);
+  font-weight: 700;
+  margin-top: var(--s-2);
+}
+
+.wallet-detail-table {
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+
+@media (max-width: 560px) {
+  .wallet-balance-card {
+    padding: 22px 18px;
+  }
+
+  .wallet-table-card .card-header-row {
+    padding: 16px 18px 0;
+  }
+
+  .wallet-table-card .empty-block {
+    margin: 0 18px 18px;
+  }
+}
+
+/* The name in a request row opens that employee's wallet. */
+.wallet-person-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: start;
+  cursor: pointer;
+  color: var(--brand-600);
+}
+
+.wallet-person-link:hover {
+  text-decoration: underline;
+}
+
+.wallet-person-link:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}

@@ -1,0 +1,92 @@
+.progress-summary {
+  margin-bottom: 16px;
+}
+
+.progress-ring-wrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 20px;
+}
+
+.progress-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.progress-ring-bg {
+  fill: none;
+  stroke: var(--surface-2);
+  stroke-width: 9;
+}
+
+.progress-ring-fill {
+  fill: none;
+  stroke: var(--brand-500);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s ease;
+}
+
+.progress-ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.progress-ring-text strong {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.progress-ring-text span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.progress-dept-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-dept-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.progress-dept-row .dept-badge {
+  min-width: 64px;
+  justify-content: center;
+}
+
+.progress-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--surface-2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--dept-color, var(--brand-500));
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progress-dept-count {
+  color: var(--muted);
+  font-weight: 600;
+  min-width: 36px;
+  text-align: end;
+}

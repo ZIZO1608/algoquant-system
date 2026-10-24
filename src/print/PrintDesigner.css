@@ -1,0 +1,207 @@
+/* Settings → "الإيصالات والطباعة" (PrintDesigner.jsx) */
+
+/* Form takes the room; the live preview keeps a readable fixed-ish column beside it. */
+.designer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(300px, 38%, 480px);
+  gap: var(--s-5);
+  align-items: start;
+}
+
+.designer-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  min-width: 0;
+}
+
+.designer-card .card-title {
+  margin-bottom: var(--s-2);
+}
+
+.designer-card .settings-lead {
+  margin-bottom: var(--s-4);
+}
+
+.designer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-4) var(--s-5);
+  margin-top: var(--s-3);
+}
+
+.designer-grid .print-seg {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.designer-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-4);
+  margin-top: var(--s-4);
+}
+
+.form-group .designer-checks {
+  margin-top: var(--s-1);
+}
+
+.designer-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.designer-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-500);
+}
+
+.designer-doc-chips {
+  margin: var(--s-2) 0 var(--s-4);
+}
+
+.designer-numbering {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  margin-bottom: var(--s-4);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.designer-numbering-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2) var(--s-5);
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.designer-numbering-info strong {
+  color: var(--ink);
+  margin-inline-start: var(--s-1);
+}
+
+.designer-numbering-set {
+  display: flex;
+  gap: var(--s-2);
+  max-width: 360px;
+}
+
+.designer-numbering-set .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.designer-inline-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--s-2);
+}
+
+.designer-savebar {
+  position: sticky;
+  bottom: var(--s-3);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--sh-2);
+}
+
+.designer-dirty {
+  font-size: var(--fs-sm);
+  color: var(--warning-ink);
+  font-weight: 600;
+}
+
+.designer-reset {
+  margin-inline-start: auto;
+}
+
+.designer-preview {
+  position: sticky;
+  top: calc(var(--topbar-height) + var(--s-4));
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--topbar-height) - var(--s-8));
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.designer-preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.designer-preview-paper {
+  min-width: 0;
+  max-width: 240px;
+  flex: 1;
+}
+
+.designer-preview-paper .select {
+  width: 100%;
+}
+
+.designer-preview-custom {
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line);
+}
+
+.designer-preview-note {
+  padding: var(--s-2) var(--s-4);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--warning-ink);
+  background: var(--warning-soft);
+}
+
+.designer-preview-note.is-danger {
+  color: var(--danger-ink);
+  background: var(--danger-soft);
+}
+
+.designer-frame {
+  flex: 1;
+}
+
+@media (max-width: 1180px) {
+  .designer {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .designer-preview {
+    position: static;
+    height: 72vh;
+    order: -1;
+  }
+}
+
+@media (max-width: 1440px) and (min-width: 1181px) {
+  .designer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .designer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

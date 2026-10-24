@@ -1,0 +1,172 @@
+/** English for src/pages/StudentsList.jsx and src/pages/StudentDetail.jsx. */
+
+const students = (n) => `${n} ${Number(n) === 1 ? 'student' : 'students'}`;
+
+export default {
+  // Students list
+  'طالب واحد': '1 student',
+  'طالبان': '2 students',
+  '{n} طلاب': ({ n }) => students(n),
+  '{n} طالباً': ({ n }) => students(n),
+  'تمت إضافة الطالب': 'Student added',
+  'رصيد مستحق': 'Balance due',
+  'التسجيلات': 'Enrollments',
+  'طالب جديد': 'New student',
+  'إدارة ملفات الطلاب والحضور والمدفوعات': 'Manage student profiles, attendance and payments',
+  'لا يوجد طلاب بعد': 'No students yet',
+  'يظهر الطلاب هنا عند تسجيلهم في دورة أو إضافتهم يدوياً.':
+    'Students appear here once they enroll in a course or are added manually.',
+  'بحث بالاسم أو الهاتف أو البريد': 'Search by name, phone or email',
+  'بحث عن طالب': 'Search students',
+  '{shown} من {total}': '{shown} of {total}',
+  'لا توجد نتائج مطابقة للبحث': 'No results match your search',
+  'أضف طالباً يدوياً دون المرور بمسار العملاء المحتملين.': 'Add a student manually, without going through the leads pipeline.',
+  'حفظ الطالب': 'Save student',
+
+  // Student detail
+  'تم تسجيل الطالب في الدورة': 'Student enrolled in the course',
+  'تم تسجيل الدفعة': 'Payment recorded',
+  'إصدار شهادة': 'Issue certificate',
+  'سيتم إصدار شهادة إتمام لهذا التسجيل. هل تريد المتابعة؟':
+    'A completion certificate will be issued for this enrollment. Do you want to continue?',
+  'إصدار': 'Issue',
+  'تم إصدار الشهادة': 'Certificate issued',
+  'الطالب غير موجود': 'Student not found',
+  'ربما حُذف هذا الطالب أو أن الرابط غير صحيح.': 'This student may have been deleted, or the link is incorrect.',
+  'العودة إلى الطلاب': 'Back to students',
+  'المعلومات': 'Details',
+  'الحضور': 'Attendance',
+  'المدفوعات': 'Payments',
+  'الشهادات': 'Certificates',
+  'التقييمات': 'Evaluations',
+  'حالة التسجيل': 'Enrollment status',
+  'المدفوع / الإجمالي': 'Paid / total',
+  'إجراءات': 'Actions',
+  'بدء الحضور': 'Mark attending',
+  'ملاحظة': 'Note',
+  'المحاور': 'Content',
+  'الإفادة': 'Benefit',
+  'ترشيح دورات': 'Recommended courses',
+  'ملاحظات': 'Notes',
+  'تسجيل في دورة': 'Enroll in course',
+  'أقسام ملف الطالب': 'Student profile sections',
+  'بيانات الطالب': 'Student details',
+  'الاسم الكامل': 'Full name',
+  'الرصيد المستحق': 'Balance due',
+  'لا يوجد': 'None',
+  'لا توجد تسجيلات بعد': 'No enrollments yet',
+  'لا يوجد سجل حضور بعد': 'No attendance records yet',
+  'لا توجد مدفوعات بعد': 'No payments yet',
+  'لا توجد شهادات بعد': 'No certificates yet',
+  'تسجيل {name} في دورة جديدة': 'Enroll {name} in a new course',
+  'السعر ({currency}) — اختياري': 'Price ({currency}) — optional',
+  'تسجيل|verb': 'Enroll',
+  'تسجيل دفعة': 'Record payment',
+  'دورة {course} · المتبقي {remaining}': '{course} · {remaining} remaining',
+  'المبلغ ({currency})': 'Amount ({currency})',
+  'حفظ الدفعة': 'Save payment',
+
+  // Student status
+  'حالة الطالب': 'Student status',
+  'تغيير حالة الطالب': 'Change student status',
+  'الحالة الجديدة': 'New status',
+  'الحالة الحالية': 'Current status',
+  'السبب (مطلوب)': 'Reason (required)',
+  'حفظ الحالة': 'Save status',
+  'تم تحديث حالة الطالب': 'Student status updated',
+  'الحالة: {status}': 'Status: {status}',
+  'الحالة: {status} منذ {date}': 'Status: {status} since {date}',
+  'إعادة التفعيل': 'Reactivate',
+  'أنهى الطالب كل دوراته. هل تريد تحويل حالته إلى «خرّيج»؟': 'The student finished all their courses. Mark them as “Graduate”?',
+  'تحويل إلى خرّيج': 'Mark as graduate',
+  'يدرس حالياً أو يمكن تسجيله في دورات جديدة.': 'Studying now or can be enrolled in new courses.',
+  'أوقف دراسته مؤقتاً (سفر، ظرف صحي…). يعود «نشطاً» تلقائياً عند تسجيله في دورة.':
+    'Paused their studies (travel, health…). Becomes “Active” again when enrolled in a course.',
+  'أنهى مساره التدريبي في الأكاديمية.': 'Finished their learning path at the academy.',
+  'ترك الأكاديمية. يعود «نشطاً» تلقائياً إذا سُجّل في دورة جديدة.':
+    'Left the academy. Becomes “Active” again if enrolled in a new course.',
+  'لا يمكن تسجيله في أي دورة جديدة حتى تُرفع هذه الحالة.': "Can't be enrolled in any new course until this status is lifted.",
+  'الطالب محظور — ارفع الحظر أولاً لتسجيله': 'The student is blocked — lift the block to enroll them',
+  'حالة الطالب الآن «{status}»، وسيعود «نشطاً» تلقائياً عند تسجيله.':
+    'The student is “{status}” now and becomes “Active” once enrolled.',
+  'لا توجد دورات مفتوحة للتسجيل لم يُسجَّل فيها الطالب بعد.': "No open courses the student isn't already enrolled in.",
+  'طالب منذ {date}': 'Student since {date}',
+  'عليهم رصيد': 'Owing',
+  'تصفية حسب الحالة': 'Filter by status',
+
+  // Overview and KPIs
+  'نظرة عامة': 'Overview',
+  'دورات جارية': 'Current courses',
+  'من أصل {n} تسجيلات': ({ n }) => `of ${n} ${Number(n) === 1 ? 'enrollment' : 'enrollments'}`,
+  'غير مسدّد': 'Unpaid',
+  'لا يوجد رصيد مستحق': 'Nothing owed',
+  'نسبة الحضور': 'Attendance rate',
+  'حضر {n} من {total} جلسة مسجّلة': 'Attended {n} of {total} recorded sessions',
+  'لا يوجد حضور مسجّل بعد': 'No attendance recorded yet',
+  'عرض التفاصيل': 'View details',
+  'سجل الحالة': 'Status history',
+
+  // Enrollment cards and steps
+  'سُجّل في {date}': 'Enrolled {date}',
+  '{paid} من {total}': '{paid} of {total}',
+  'شهادة صادرة في {date}': 'Certificate issued {date}',
+  'يجب سداد الرسوم كاملة قبل إصدار الشهادة': 'Fees must be paid in full before issuing the certificate',
+  'استرداد مبلغ': 'Refund',
+  'سجّل الطالب في دورة لتظهر هنا مع حالة الحضور والدفع.':
+    'Enroll the student in a course to see it here with attendance and payments.',
+  'إكمال الدورة': 'Complete course',
+  'تسجيل انسحاب': 'Record withdrawal',
+  'إعادة التسجيل': 'Reinstate',
+  'التراجع عن الإكمال': 'Undo completion',
+  'بدأ حضور الجلسات. يحدث تلقائياً عند تسجيل أول حضور له.':
+    'Started attending sessions. Happens automatically when their first attendance is marked.',
+  'أنهى الدورة. يحدث تلقائياً لمن يحضر عند اكتمال الدورة، ويسمح بإصدار الشهادة.':
+    'Finished the course. Happens automatically for attending students when the course completes, and allows issuing the certificate.',
+  'انسحب من هذه الدورة ويُحرَّر مقعده. يلزم كتابة السبب.': 'Left this course and frees their seat. A reason is required.',
+  'يعيده إلى الدورة ويحجز له مقعداً من جديد.': 'Puts them back in the course and takes a seat again.',
+  'يعيده إلى «يحضر» إذا سُجّل الإكمال بالخطأ.': 'Moves them back to “Attending” if the completion was a mistake.',
+  'تغيير حالة التسجيل': 'Change enrollment status',
+  'سبب الانسحاب (مطلوب)': 'Reason for withdrawing (required)',
+  'تم تحديث حالة التسجيل': 'Enrollment status updated',
+  'سيعود الطالب إلى دورة «{course}» ويُحجز له مقعد. هل تريد المتابعة؟':
+    'The student goes back to “{course}” and takes a seat. Continue?',
+
+  // Status history
+  'لا توجد تغييرات بعد': 'No changes yet',
+  'يظهر هنا كل تغيير في حالة الطالب أو في حالة تسجيله بالدورات، مع السبب ومن قام به.':
+    "Every change to the student's status or course enrollments shows here, with the reason and who made it.",
+  'دورة «{course}»': 'Course “{course}”',
+  'تلقائياً من النظام': 'Automatically by the system',
+
+  // Payments, receipts, refunds
+  'كشف حساب': 'Statement',
+  'الدفعات والإيصالات': 'Payments & receipts',
+  'طباعة كشف الحساب': 'Print statement',
+  'رقم الوصل': 'Receipt no.',
+  'الطريقة': 'Method',
+  'صالح': 'Valid',
+  'طباعة الوصل': 'Print receipt',
+  'طباعة الوصل {number}': 'Print receipt {number}',
+  'إلغاء الدفعة': 'Void payment',
+  'تم إلغاء الدفعة': 'Payment voided',
+  'الوصل {number} بقيمة {amount}': 'Receipt {number} for {amount}',
+  'يُخصم المبلغ من المدفوع ويبقى الوصل في السجل بعلامة «ملغى». لا يمكن التراجع عن الإلغاء.':
+    "The amount comes off the paid total and the receipt stays on record marked “Void”. Voiding can't be undone.",
+  'سبب الإلغاء': 'Reason for voiding',
+  'جاري الإلغاء…': 'Voiding…',
+  'كامل المتبقي': 'Full balance',
+  'طباعة وصل القبض بعد الحفظ': 'Print the receipt after saving',
+  'طلبات الاسترداد': 'Refund requests',
+  'طلب استرداد': 'Refund request',
+  'دورة {course} · قابل للاسترداد حتى {amount}': '{course} · refundable up to {amount}',
+  'أدخل مبلغ الاسترداد (أكبر من صفر)': 'Enter the refund amount (above zero)',
+  'يُراجَع الطلب ويُعتمد ويُصرف من صفحة المالية، ثم يمكن طباعة سند الاسترداد.':
+    'Finance reviews, approves and pays it from the Finance page; the refund voucher can then be printed.',
+  'تم إرسال طلب الاسترداد إلى المالية': 'Refund request sent to finance',
+
+  // Page polish: links out of the list and the paid share
+  'يوجد طالب مسجّل بنفس رقم الهاتف.': "A student with this phone number already exists.",
+  'فتح ملف الطالب الموجود': "Open the existing student",
+  'مدفوع {percent}%': "{percent}% paid",
+  'نسبة المدفوع من قيمة التسجيل': "Share of the enrolment fee paid so far",
+};

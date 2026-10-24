@@ -1,0 +1,60 @@
+/* Lead pipeline colors (read by StatusBadge tones and the dashboard funnel) */
+:root {
+  --lead-new: var(--muted-soft);
+  --lead-contacted: var(--brand-300);
+  --lead-interested: var(--brand-500);
+  --lead-paid: var(--warning);
+  --lead-enrolled: var(--success);
+  --lead-archived: var(--line-strong);
+  --lead-lost: var(--danger);
+
+  /* Department palette: one hue per specialty, tuned to sit next to the brand blue */
+  --dept-sales: #e9b93a;
+  --dept-sales-ink: #3b2f05;
+  --dept-operation: #e4645e;
+  --dept-operation-ink: #fff;
+  --dept-logistics: #3d8bd8;
+  --dept-logistics-ink: #fff;
+  --dept-media: #d97aa8;
+  --dept-media-ink: #fff;
+  --dept-accountant: #2e4a6b;
+  --dept-accountant-ink: #fff;
+}
+
+:root[data-theme="dark"] {
+  --dept-accountant: #6f8db0;
+  --dept-accountant-ink: #071322;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --dept-accountant: #6f8db0;
+    --dept-accountant-ink: #071322;
+  }
+}
+
+.dept-sales { --dept-color: var(--dept-sales); --dept-text: var(--dept-sales-ink); }
+.dept-operation,
+.dept-ops { --dept-color: var(--dept-operation); --dept-text: var(--dept-operation-ink); }
+.dept-logistics { --dept-color: var(--dept-logistics); --dept-text: var(--dept-logistics-ink); }
+.dept-media { --dept-color: var(--dept-media); --dept-text: var(--dept-media-ink); }
+.dept-accountant { --dept-color: var(--dept-accountant); --dept-text: var(--dept-accountant-ink); }
+
+.dept-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  letter-spacing: 0;
+  border-radius: var(--r-pill);
+  background: var(--dept-color);
+  color: var(--dept-text);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.task-row-border {
+  border-inline-start: 4px solid var(--dept-color);
+}

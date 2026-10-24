@@ -1,0 +1,53 @@
+/* .topbar-btn (AppShell.css) loads later and fixes the width at 40px; the doubled class keeps this wider. */
+.topbar-btn.lang-toggle {
+  width: auto;
+  min-width: 40px;
+  gap: 6px;
+  padding-inline: 10px;
+}
+
+.lang-toggle svg,
+.lang-pill svg {
+  flex-shrink: 0;
+}
+
+.lang-toggle-text {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding-inline: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.lang-pill:hover {
+  background: var(--surface-2);
+  border-color: var(--line-strong);
+  color: var(--ink);
+}
+
+/* Narrow app bar: the language code alone says enough. */
+@media (max-width: 480px) {
+  .topbar-btn.lang-toggle {
+    padding-inline: 8px;
+  }
+
+  .lang-toggle svg {
+    display: none;
+  }
+}

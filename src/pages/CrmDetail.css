@@ -1,0 +1,332 @@
+/* ==========================================================================
+   CRM lead detail
+   ========================================================================== */
+
+/* ---------- Header ---------- */
+
+.crm-detail-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  min-width: 0;
+}
+
+.crm-detail-heading-text {
+  min-width: 0;
+}
+
+.crm-detail-title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  flex-wrap: wrap;
+}
+
+.crm-detail-title-row .page-title {
+  margin-bottom: 0;
+}
+
+.crm-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.crm-meta-sep {
+  color: var(--muted-soft);
+}
+
+/* ---------- Layout ---------- */
+
+.crm-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--s-6);
+  align-items: start;
+}
+
+.crm-detail-main,
+.crm-detail-side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  min-width: 0;
+}
+
+/* ---------- Activity timeline ---------- */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-item {
+  position: relative;
+  display: flex;
+  gap: var(--s-4);
+  padding-block: var(--s-3);
+}
+
+/* The vertical rail: full item height, trimmed to the marker centre at both ends */
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 5px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline-item:first-child::before {
+  top: 25px;
+}
+
+.timeline-item:last-child::before {
+  bottom: calc(100% - 25px);
+}
+
+.timeline-marker {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--brand-300);
+  box-shadow: 0 0 0 3px var(--brand-100);
+}
+
+.timeline-item:first-child .timeline-marker {
+  background: var(--brand-500);
+}
+
+.timeline-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeline-date {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.timeline-text {
+  font-size: var(--fs-md);
+  color: var(--ink);
+  line-height: 1.6;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Note form ---------- */
+
+.crm-note-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+
+.crm-note-form .form-actions {
+  margin-top: 0;
+}
+
+/* ---------- Definition grid (bot data, conversion summary) ---------- */
+
+.crm-defs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-3);
+}
+
+.crm-defs > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.crm-defs dt {
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.crm-defs dd {
+  font-size: var(--fs-md);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+/* Long free-text answers (goal, recommendation) take the full row */
+.crm-defs > div.is-wide {
+  grid-column: 1 / -1;
+}
+
+/* Notes written by staff read as quoted text in the timeline */
+.timeline-item.type-note .timeline-text {
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+}
+
+.crm-followup-current {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+/* ---------- Side column ---------- */
+
+.crm-status-current {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+}
+
+.crm-detail-side .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.crm-status-final {
+  margin-bottom: var(--s-4);
+}
+
+.crm-followup {
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--line);
+}
+
+.crm-followup .form-label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.crm-followup-actions {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-top: var(--s-2);
+}
+
+.crm-followup .form-hint {
+  margin-top: var(--s-2);
+}
+
+.crm-followup .form-error {
+  margin-top: var(--s-2);
+  margin-bottom: 0;
+}
+
+.crm-assignee {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-4);
+}
+
+.crm-assignee-name {
+  font-weight: 600;
+}
+
+.crm-avatar-empty {
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+/* ---------- Convert & pay: success state ---------- */
+
+.crm-convert-success {
+  display: flex;
+  gap: var(--s-4);
+  align-items: flex-start;
+}
+
+.crm-convert-success .dialog-icon {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.crm-convert-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.crm-convert-lead {
+  font-size: var(--fs-base);
+  line-height: 1.7;
+  margin-bottom: var(--s-4);
+}
+
+.crm-convert-summary {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 900px) {
+  .crm-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .crm-defs,
+  .crm-convert-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .crm-convert-success {
+    flex-direction: column;
+  }
+}
+
+/* What a converted lead became: the course it enrolled in and where that enrollment stands. */
+.crm-enrollments {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.crm-enrollments li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3) 0;
+  border-block-start: 1px solid var(--line);
+}
+
+.crm-enrollments li:first-child {
+  border-block-start: 0;
+  padding-block-start: 0;
+}
+
+.crm-enrollment-course {
+  font-weight: 600;
+  min-width: 0;
+}
+
+.crm-enrollment-badges {
+  display: flex;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}

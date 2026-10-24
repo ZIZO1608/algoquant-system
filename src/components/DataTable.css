@@ -1,0 +1,214 @@
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.data-table th {
+  background: var(--surface-2);
+  color: var(--muted);
+  padding: 11px 16px;
+  text-align: start;
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: 0;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--line);
+}
+
+.data-table th:first-child {
+  border-start-start-radius: var(--r-md);
+}
+
+.data-table th:last-child {
+  border-start-end-radius: var(--r-md);
+}
+
+.data-table td {
+  padding: 13px 16px;
+  font-size: var(--fs-md);
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+  color: var(--ink);
+}
+
+.data-table.dense td {
+  padding: 8px 12px;
+  font-size: var(--fs-sm);
+}
+
+.data-table.dense th {
+  padding: 8px 12px;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tbody tr:hover td {
+  background: color-mix(in srgb, var(--surface-2) 55%, transparent);
+}
+
+.data-table tr.clickable {
+  cursor: pointer;
+}
+
+.data-table tr.clickable:focus-visible {
+  outline: 2px solid var(--brand-500);
+  outline-offset: -2px;
+}
+
+.data-table tr.clickable:hover td {
+  background: var(--brand-50);
+}
+
+.data-table .table-empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 28px 16px;
+  font-size: var(--fs-md);
+}
+
+.data-table .skeleton-row td {
+  padding: 16px;
+}
+
+.data-table td a {
+  font-weight: 600;
+}
+
+/* Cell helpers */
+.cell-name {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.cell-muted {
+  font-size: var(--fs-sm);
+  color: var(--muted);
+}
+
+.cell-phone {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-num {
+  font-variant-numeric: tabular-nums;
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: start;
+}
+
+.cell-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cell-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cell-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.table-action-btn {
+  min-height: 30px;
+  padding: 0 14px;
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  background: var(--surface);
+  color: var(--brand-600);
+  border: 1px solid var(--brand-200);
+  border-radius: var(--r-pill);
+  transition: background 0.15s, color 0.15s;
+}
+
+.table-action-btn:hover {
+  background: var(--brand-600);
+  color: #fff;
+  border-color: var(--brand-600);
+}
+
+/* Lead source badges */
+.source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.source-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.source-badge.instagram,
+.source-badge.instagram_dm,
+.source-badge.instagram_comment,
+.source-badge.instagram_ad,
+.source-badge.social_media {
+  background: color-mix(in srgb, #d6337a 12%, var(--surface));
+  color: color-mix(in srgb, #d6337a 70%, var(--ink));
+}
+
+.source-badge.instagram .source-badge-dot,
+.source-badge.instagram_dm .source-badge-dot,
+.source-badge.instagram_comment .source-badge-dot,
+.source-badge.instagram_ad .source-badge-dot,
+.source-badge.social_media .source-badge-dot {
+  background: #d6337a;
+}
+
+.source-badge.whatsapp {
+  background: color-mix(in srgb, #1eb15a 12%, var(--surface));
+  color: color-mix(in srgb, #1eb15a 65%, var(--ink));
+}
+
+.source-badge.whatsapp .source-badge-dot {
+  background: #1eb15a;
+}
+
+.source-badge.bot {
+  background: var(--brand-100);
+  color: var(--brand-700);
+}
+
+.source-badge.bot .source-badge-dot {
+  background: var(--brand-500);
+}
+
+.source-badge.sales,
+.source-badge.reference,
+.source-badge.manual {
+  background: var(--surface-2);
+  color: var(--ink-soft);
+}

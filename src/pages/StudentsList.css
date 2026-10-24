@@ -1,0 +1,85 @@
+/* ==========================================================================
+   Students list: status chips, search + count in the filter bar
+   ========================================================================== */
+
+.students-status-chips {
+  margin-bottom: var(--s-3);
+}
+
+.chip-count {
+  font-family: var(--font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.chip.active .chip-count {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  color: inherit;
+}
+
+/* The current enrollment's badge sits under the course names at its natural width */
+.students-course-cell .badge {
+  align-self: flex-start;
+}
+
+.students-filter-bar {
+  justify-content: space-between;
+}
+
+.students-search {
+  position: relative;
+  display: block;
+  flex: 0 1 320px;
+  min-width: 200px;
+}
+
+.students-search svg {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.students-search .input {
+  padding-inline-start: 36px;
+}
+
+.students-count {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 680px) {
+  .students-search {
+    flex-basis: 100%;
+  }
+}
+
+/* Course link inside the students table */
+.students-course-link {
+  color: var(--brand-600);
+  font-weight: 600;
+}
+
+.students-course-link:hover {
+  text-decoration: underline;
+}
+
+/* Duplicate phone warning in the add-student form */
+.students-duplicate {
+  align-items: flex-start;
+  margin-bottom: var(--s-4);
+}
+
+.students-duplicate-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  align-items: flex-start;
+  min-width: 0;
+}

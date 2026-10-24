@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دليل Algo Quant</title>
+<link rel="icon" type="image/png" href="../public/favicon-32.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+
+  :root{
+    --brand-500:#26ABFB;
+    --brand-600:#0A78C4;
+    --brand-700:#085F9C;
+    --brand-900:#0D2A45;
+    --brand-950:#081C30;
+    --brand-50:#EEF8FF;
+    --brand-100:#D9EFFE;
+    --bg:#F3F6F9;
+    --surface:#FFFFFF;
+    --surface-2:#E9EEF3;
+    --ink:#0F1B26;
+    --ink-soft:#3A4A58;
+    --ink-faint:#5F6F7D;
+    --line:#D5DDE5;
+    --line-strong:#B8C4CF;
+    --primary:var(--brand-900);
+    --primary-ink:#FFFFFF;
+    --accent:var(--brand-600);
+    --accent-ink:var(--brand-700);
+    --accent-soft:var(--brand-100);
+    --warn:#C93A2E;
+    --warn-soft:#FBE7E4;
+    --warn-ink:#952A21;
+    --ok:#1E8E5A;
+    --ok-soft:#E1F4EA;
+
+    --role-admin:#0D2A45;
+    --role-sales:#E9B93A;
+    --role-media:#D97AA8;
+    --role-operation:#E4645E;
+    --role-instructor:#1E8E5A;
+    --role-accountant:#2E4A6B;
+
+    --font-head:'Cairo','IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+    --font-body:'IBM Plex Sans Arabic','Cairo','Segoe UI',Tahoma,sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --brand-50:#0F2438;
+      --brand-100:#123152;
+      --brand-600:#4DB8FC;
+      --brand-700:#7CCAFD;
+      --bg:#0B1219;
+      --surface:#121B25;
+      --surface-2:#192430;
+      --ink:#E8EEF3;
+      --ink-soft:#BCC8D3;
+      --ink-faint:#97A6B3;
+      --line:#26333F;
+      --line-strong:#36475A;
+      --primary:#0A1826;
+      --accent:var(--brand-600);
+      --accent-ink:var(--brand-700);
+      --accent-soft:var(--brand-100);
+      --warn:#F08A7A;
+      --warn-soft:#3D1F1A;
+      --warn-ink:#F7B0A4;
+      --ok:#4EC58A;
+      --ok-soft:#133124;
+      --role-admin:#9ED6FD;
+      --role-accountant:#6F8DB0;
+    }
+  }
+  :root[data-theme="dark"]{
+    --brand-50:#0F2438;
+    --brand-100:#123152;
+    --brand-600:#4DB8FC;
+    --brand-700:#7CCAFD;
+    --bg:#0B1219;
+    --surface:#121B25;
+    --surface-2:#192430;
+    --ink:#E8EEF3;
+    --ink-soft:#BCC8D3;
+    --ink-faint:#97A6B3;
+    --line:#26333F;
+    --line-strong:#36475A;
+    --primary:#0A1826;
+    --accent:var(--brand-600);
+    --accent-ink:var(--brand-700);
+    --accent-soft:var(--brand-100);
+    --warn:#F08A7A;
+    --warn-soft:#3D1F1A;
+    --warn-ink:#F7B0A4;
+    --ok:#4EC58A;
+    --ok-soft:#133124;
+    --role-admin:#9ED6FD;
+    --role-accountant:#6F8DB0;
+  }
+
+  *{box-sizing:border-box;}
+  html{color-scheme:light dark;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.8;
+    margin:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{scroll-behavior:auto !important; transition:none !important; animation:none !important;}
+  }
+
+  h1,h2,h3,h4{
+    font-family:var(--font-head);
+    color:var(--ink);
+    text-wrap:balance;
+    margin:0;
+    letter-spacing:0;
+  }
+  a{color:var(--accent);}
+  code{
+    font-family:ui-monospace,'Cascadia Code',Consolas,monospace;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:.1em .45em;
+    font-size:.92em;
+    direction:ltr;
+    unicode-bidi:isolate;
+    display:inline-block;
+  }
+
+  .page{direction:rtl;}
+
+  /* ---------- header ---------- */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:var(--primary);
+    color:var(--primary-ink);
+    padding:44px clamp(18px,4vw,56px) 40px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(38,171,251,.45), transparent 42%),
+      radial-gradient(circle at 92% 95%, rgba(38,171,251,.2), transparent 45%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;max-width:1180px;margin:0 auto;}
+  .hero-brand{display:flex;align-items:center;gap:14px;margin-bottom:26px;}
+  .hero-brand img{width:56px;height:56px;display:block;}
+  .hero-brand-name{font-family:var(--font-head);font-weight:800;font-size:1.5rem;line-height:1.1;direction:ltr;text-align:start;}
+  .hero-brand-tag{font-size:.85rem;color:rgba(255,255,255,.7);margin-top:2px;}
+  .eyebrow{
+    font-family:var(--font-head);
+    font-weight:700;
+    font-size:.8rem;
+    letter-spacing:0;
+    color:var(--brand-500);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .eyebrow::before{content:"";width:20px;height:2px;background:var(--brand-500);display:inline-block;}
+  .hero h1{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;margin-top:10px;color:#fff;}
+  .hero p{max-width:62ch;color:rgba(255,255,255,.78);margin-top:10px;font-size:1.02rem;}
+  .hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;}
+  .hero-meta span{
+    font-size:.82rem;
+    border:1px solid rgba(255,255,255,.22);
+    color:rgba(255,255,255,.88);
+    padding:5px 12px;
+    border-radius:99px;
+  }
+
+  /* ---------- layout ---------- */
+  .layout{
+    max-width:1180px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1fr 220px;
+    gap:40px;
+    padding:0 clamp(18px,4vw,56px) 60px;
+  }
+  main{min-width:0;padding-top:34px;}
+  nav.toc{
+    position:sticky;
+    top:18px;
+    align-self:start;
+    padding-top:34px;
+    max-height:calc(100vh - 36px);
+    overflow-y:auto;
+  }
+  nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;border-inline-start:2px solid var(--line);padding-inline-start:14px;}
+  nav.toc a{
+    display:block;
+    padding:6px 0;
+    color:var(--ink-soft);
+    text-decoration:none;
+    font-size:.88rem;
+    border-inline-start:2px solid transparent;
+    margin-inline-start:-16px;
+    padding-inline-start:14px;
+    transition:color .15s, border-color .15s;
+  }
+  nav.toc a:hover{color:var(--ink);}
+  nav.toc a.active{color:var(--accent);border-inline-start-color:var(--brand-500);font-weight:700;}
+  .toc-title{font-family:var(--font-head);font-weight:700;font-size:.78rem;color:var(--ink-faint);margin-bottom:10px;display:block;}
+
+  .mobile-toc{display:none;}
+
+  @media (max-width:920px){
+    .layout{grid-template-columns:1fr;}
+    nav.toc{display:none;}
+    .mobile-toc{
+      display:flex;
+      gap:8px;
+      overflow-x:auto;
+      position:sticky;
+      top:0;
+      background:var(--bg);
+      padding:12px clamp(14px,4vw,30px);
+      border-bottom:1px solid var(--line);
+      z-index:5;
+    }
+    .mobile-toc a{
+      flex:none;
+      font-size:.82rem;
+      padding:7px 13px;
+      border-radius:99px;
+      border:1px solid var(--line);
+      color:var(--ink-soft);
+      text-decoration:none;
+      background:var(--surface);
+      white-space:nowrap;
+    }
+    .mobile-toc a.active{border-color:var(--brand-500);color:var(--accent);background:var(--accent-soft);}
+  }
+
+  /* ---------- sections ---------- */
+  section{padding-top:44px;scroll-margin-top:18px;}
+  section:first-of-type{padding-top:0;}
+  .section-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap;}
+  .section-num{font-family:var(--font-head);font-weight:800;color:var(--brand-500);font-size:1rem;font-variant-numeric:tabular-nums;}
+  section h2{font-size:1.5rem;font-weight:800;}
+  .section-sub{color:var(--ink-soft);font-size:.98rem;max-width:70ch;margin-top:8px;}
+  .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .who-label{font-size:.82rem;color:var(--ink-faint);}
+
+  .role{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--font-head);
+    font-size:.78rem;
+    font-weight:700;
+    padding:4px 10px 4px 8px;
+    border-radius:99px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    color:var(--ink);
+    white-space:nowrap;
+  }
+  .role .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .role-admin .dot{background:var(--role-admin);}
+  .role-sales .dot{background:var(--role-sales);}
+  .role-media .dot{background:var(--role-media);}
+  .role-operation .dot{background:var(--role-operation);}
+  .role-instructor .dot{background:var(--role-instructor);}
+  .role-accountant .dot{background:var(--role-accountant);}
+
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 24px;
+    margin-top:20px;
+  }
+  .steps{list-style:none;margin:20px 0 0;padding:0;counter-reset:step;display:flex;flex-direction:column;gap:0;}
+  .steps li{
+    counter-increment:step;
+    position:relative;
+    padding:0 0 22px 0;
+    padding-inline-start:44px;
+    border-inline-start:2px solid var(--line);
+    margin-inline-start:15px;
+  }
+  .steps li:last-child{border-color:transparent;padding-bottom:2px;}
+  .steps li::before{
+    content:counter(step);
+    position:absolute;
+    inset-inline-start:-16px;
+    top:-2px;
+    width:30px;height:30px;
+    border-radius:50%;
+    background:var(--brand-500);
+    color:#06202F;
+    font-family:var(--font-head);
+    font-weight:800;
+    font-size:.85rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps b{font-family:var(--font-head);}
+  .path{color:var(--accent-ink);background:var(--accent-soft);padding:1px 8px;border-radius:6px;font-size:.9em;font-weight:700;white-space:nowrap;}
+
+  ul.plain{margin:14px 0 0;padding-inline-start:20px;}
+  ul.plain li{margin-bottom:8px;color:var(--ink-soft);list-style:disc;}
+  ul.plain b{color:var(--ink);font-family:var(--font-head);}
+
+  .callout{
+    display:flex;
+    gap:12px;
+    padding:16px 18px;
+    border-radius:12px;
+    margin-top:18px;
+    font-size:.95rem;
+  }
+  .callout .icon{flex:none;font-size:1.15rem;line-height:1.5;}
+  .callout.warn{background:var(--warn-soft);border:1px solid color-mix(in srgb, var(--warn) 35%, transparent);color:var(--ink);}
+  .callout.warn b{color:var(--warn-ink);font-family:var(--font-head);}
+  .callout.note{background:var(--accent-soft);border:1px solid color-mix(in srgb, var(--brand-500) 45%, transparent);color:var(--ink);}
+  .callout.note b{color:var(--accent-ink);font-family:var(--font-head);}
+
+  code.cred{font-size:1em;}
+
+  /* lifecycle stepper */
+  .lifecycle{display:flex;gap:0;margin-top:22px;overflow-x:auto;padding-bottom:6px;}
+  .lifecycle .node{flex:1;min-width:118px;text-align:center;position:relative;padding-top:24px;}
+  .lifecycle .node::before{
+    content:"";position:absolute;top:9px;inset-inline-start:-50%;inset-inline-end:50%;height:2px;background:var(--line-strong);
+  }
+  .lifecycle .node:first-child::before{inset-inline-start:50%;}
+  .lifecycle .node::after{
+    content:"";position:absolute;top:2px;inset-inline-end:calc(50% - 8px);width:16px;height:16px;border-radius:50%;
+    background:var(--brand-500);border:3px solid var(--surface);box-shadow:0 0 0 1px var(--brand-500);
+  }
+  .lifecycle .node span{display:block;font-size:.82rem;color:var(--ink-soft);font-weight:500;}
+  .lifecycle .node b{display:block;font-family:var(--font-head);font-size:.9rem;margin-top:2px;}
+
+  /* pipeline */
+  .pipeline{display:flex;flex-direction:column;gap:0;margin-top:20px;position:relative;}
+  .pipeline .stage{display:flex;align-items:flex-start;gap:14px;padding-bottom:18px;position:relative;}
+  .pipeline .stage::before{content:"";position:absolute;top:22px;bottom:0;inset-inline-start:9px;width:2px;background:var(--line);}
+  .pipeline .stage:last-child::before{display:none;}
+  .pipeline .bullet{flex:none;width:20px;height:20px;border-radius:50%;background:var(--surface);border:2px solid var(--brand-500);margin-top:1px;}
+  .pipeline .stage.terminal .bullet{border-color:var(--warn);background:var(--warn-soft);}
+  .pipeline .txt b{font-family:var(--font-head);font-size:.98rem;}
+  .pipeline .txt p{margin:2px 0 0;color:var(--ink-soft);font-size:.9rem;}
+
+  table{width:100%;border-collapse:collapse;margin-top:18px;font-size:.92rem;}
+  th,td{text-align:start;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-family:var(--font-head);color:var(--ink-faint);font-weight:700;font-size:.78rem;background:var(--surface-2);}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin-top:18px;background:var(--surface);}
+  .table-wrap table{margin-top:0;}
+
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px;}
+  @media (max-width:680px){.grid-3{grid-template-columns:1fr;}}
+  .mini{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;}
+  .mini b{font-family:var(--font-head);display:block;margin-bottom:4px;font-size:.94rem;}
+  .mini p{margin:0;color:var(--ink-soft);font-size:.86rem;}
+
+  details.appendix{
+    background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-top:14px;
+  }
+  details.appendix summary{cursor:pointer;font-family:var(--font-head);font-weight:700;font-size:.98rem;}
+  details.appendix summary::marker{color:var(--brand-500);}
+  details.appendix ul{margin:14px 0 0;padding-inline-start:20px;}
+  details.appendix li{margin-bottom:8px;color:var(--ink-soft);font-size:.92rem;list-style:disc;}
+
+  footer{
+    max-width:1180px;margin:20px auto 0;padding:22px clamp(18px,4vw,56px) 40px;
+    color:var(--ink-faint);font-size:.82rem;border-top:1px solid var(--line);
+  }
+
+  .badge-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--warn);color:#fff;border-radius:99px;font-size:.7rem;
+    width:18px;height:18px;font-family:var(--font-head);
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-brand"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACACAYAAADDPmHLAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAACYpSURBVHhe7V0JeFRVsu43b2ae+sblG2ZGdBQMne6+t/t2J03YlEFHwMEZ0BEBcQbUGRdUBsWAsglGWQz7FrIBCYEkQPawGDYVER1HFBFB9kUIhB1BQNCkc95Xde+5fbr63iZBzcK7//fVl/R2tqpTp6pOnXNtNgsWLFiwYMGCBQsWLFiwYMGChasYt0tdmvqnfhx3V+mZOP/CE3HKy8lem832P/R7Fq4yeAbM9HnTNs93ZB4+4y6sZMpSxtyljMkLv2HuOV/t841/+7UbbbZf0d9ZuArgSVyb6F54qtKzhjHnEsYcBYw5C6qRHEWMud9iTFnNmJyxd5fnX0n30N9baLy4xjdjQ7HvbcacpYw58iqZM79KJwdQQRWLRgow9yrGYvNOXZRezXuUFmShEUIet77MC8wvqlaZnhdkPgpAQYBFFwJVMWdBFXPlVzHXcsbceWeYfeDcB2h5FhoR3InvjwK17ijUmE/IVRBgzsIAcxSqf/F1QYA58gPMsZwxz4KKC/6nJoKBaKGxwTkg5V5P4XlV7ZswXxQA0AT8PVwS8qsY2AuetJ3bbDbbtbR8Cw0YzWy2X0qpu/c4VzJtba/Ev8DYEOZzLUCFQl8eqpl7DWNS4urxtA4LDRjOUctHeVYzZi+s1gRAJRAAXOOF2S4yPIwKKplrKWO+xacvyS9Oj6b1WGiAcMR1ayJlVJyGNTxo3XMBEJiurftBZmsaQlsO8H+0CarQM3BO+HAlrctCA4Rr9IrXlVXA/EAo8wVDD9d5bvzBa80d5N/TSVsynMXVzFPwLfONyImh9VloQOhwm+1/5Nn7j4IbxxlKmarOauG1pgUwHiAyXxAOZ36AyeBNTN24lNZpoQHBPbqsh7ScsWi69msMBX+fMhnfN/kuCgAKTCVzlDLmyT0VcDw1XqL1WmggkJK2rXPpln/47Dci8bv0N8HYgKoF3BBQmvjBdFqvhQaAqL7jPM7cM8xeDAIAjFWZSxlNBUD8XPyLAiB6C/kBBtpFyao41NTvt+ICDQ3K9E9Hwzodnc+ZHy4ARkwXGU9fhwgAUjXzLGXMNTyvB63fQj3DNXv/584yxuzIRFUAjJhP/6eMDyPNNeTuorSKMWnKZ0to/RbqEcqAdJcz55tKrv7t6AGEz2oqBGafUxIFwLGEMWfmkdOt7//79bQdFuoJ9jHvxcPsjy4A6z90CaDMpv/XVBC4AICHIS9jTBq9vDtth4V6gjN5yyq0/kkwR2QsZb7Re5Tp+vs8IITxggAuA86pH+XQdlioBzRT2t8kzdlX5VnLmLOEh3/VcK4ZoynRz8JehwhAFW4VS7P3Hmprs11D22OhjtGsS5dfKiOX9IlJ21qiZB+76F7BmBMigYXVwW1gsuEjRgkpw+nsN6RixuS888wTP9NH22MhFL+QH36y2e19xsl3DMtu5Xgp9S57nwS5WbcBrua/+tWN9Ms/FP6e8faYCR8Okefs3+FZwhgKQxELywLCtZwylQhDJCEAI1NewZiSvPFZ2oYrQbNmzW5ydBvgur1ngmx/dtI9LZ6c0BHGLPbh/s0gpY1+v0HD2Xtgc2/yZ8/Lc/aUOjMO7nMtOHZRXnCKyXkXmZJ/iXng/6wjTJ5XftyZcXCLI3VXWez8g4ktU7/sFfXslNaKzXYdLbO2kGy2X8SMLXsoNnNfmSvvAjLLActDfqW2ywcMDmU4/T8S2fMrmbSSMcesrcW07ki44/rrb3DH57Zulb6ttzxn32RX2u7Vrozyba7MipPyvCNMmn+cyXnfMnnxt8y94CTzLjh+Uco4fMA1d98qf+rmVxwNOTvJ52v3W+/MT5I9OSfOwYBDMgao4mhwm0oYk4oZcwGVMOZawpgElnQZY65VjHlXM+Z5izHXom+YPK+i3J2yvcQ94e1B9mcm+Gk9tUX04Lkd5BmfLHXlfM1kMN4gQ+gyqt7s/RACOyB97yEQNlonx6022zWuV7L+KE3+eKRv9u7lrvkVFVLeBeYuY7i5BIarE/oNwSUYF6AijeD/UsZcME4r1YxlaeEp5kvfnut46PmGtR8R/cy0NvLcr76CFCrwk+35ATUgoyVd6jF1I/cK/uKgBpijmDHHMoaMcq9kzLXwDFMyD2zyTv/PdNfQbEjV/jmtu6ZwPDWltZL8xXx54ekqCXb2UBDCjT0uHJEEAb8DQr3wTCD6iQTDLWJlVF47d9aR/e7C7zGfAAQdhAb6CK6kKIR6MqoQddTHCA1a0FwBFF7P25CrWP6NY0Bmw3BDYXfMk1X+NUhpdJ66Poo+eHg4NVwIcKALtQHhv4VBKmFMLtOkv+Aik+ce2BWb8mli3NCFsbQdNUVs/AKfN+nzYjn/PJNBjRdpGkFIETPTEMgsbkcUBvAsgZxQ+k9aB6BZ/7QuOLNB0ASBCu0zFwCDMaLjpBuyAeZawZhn0fFAi/6zOtJ66xo/d83Y8pkag6/EmU+DMLRzaIXTgTAYHG65g2BgWUVM3YxZw5h78TnmSt3+sTJ29bM3t2jxG9qomsA7OKuDZ9aWtUpJNZPeYurAoscQZLbYPr0/gmcB+YLuqf823B2EzCRP1uEzIAS8PFGQxH7TMRInSeiGlKopQCOARnGl7Dhwo9NZfyeZXCNKusFajrl3yPzwwUMSJVr7Kw6q+Duxw9xlw79aYicSuGFljLmXMyZnlh/xTf14atSjL1+RgSQNWdxbmbtvC9gglEm0bbS9oPVi5x803RfwZh16H9qJv+fCI5RHmS2ODxUIcUzUcQkwyHxSxq74UTyRK4KUsiMTomJBtU86cxkKGVDtPXXv3Zh0ZsDrPPguY85ljHnAmFpwtFKZsyPLOSjzTtrOywGMNWnKR9kyagKVWZT5Ye2FdoIA5hzf5TexTaQJ/8mBZYa3P0TDCOu+kW1EGW8kBCCA7tSd79B66wSQeu1I37MPomJ8C5Z2wozEQdVf8yRMA8YHBUCtB41LHtDRDE4w6lAt5p9nnqTNq+VhuZ1omyMBmKhklB9wosoOn/28nSFUypgzq6LK/tAzLWh5AOf4919BFxQOmvA2o7AHhUBMT+MEp5hccJhFEw40ogu197hwwJgsYeA1nfJ36nQDrfsnh8PhaOKYe+AbGHhx7aedMSI6sEBq7l1k4ktJKIOEpQGomDEnCELhd8yTvm2db8SCbrTtZoie+HEhuGahGoDWFyQ7HCoFK3/w7HtpWQDIG5DwICrfpArtt1mKGlIRHFqt1l/j0TbtNdcCMPbuhWfP3p2Q3oTW/ZOjadzdTZyZB89CI9RNGL7WG9gAhPgg6ANiMvNdoCYLYUbCPj8wleF7OGtMbAnV/axE5oD6lYurmCt5yzplSGZn2gcK15RP34IlLThLg4IdWg8YvNrO4FuMeSete5yWBbD/I8HvzP0ahZK6nCGCUIMxE0lfCsAtzDt/ptvkpXUvADfcEHV9i7R9J8BvhwgbZV6kTtHP4DX9PVALCBwtY6z1sgC7a1kVZuNAp9FvNhEAyqQWIDSwVhZ+y7ypO5ZE/XNye9oXQLNWD0dJWUfPQZCK2gCRCNZhz/QNibQ8QPPmzW90zj14GsYIvou2C/zOYAzMyOh7ugDAEpBz/PTdfx34o4fVawQ5ZccHEq5xtROAkA6C/x8mAAEGqjOu6AJzDsnJfWD41F6PJ8zoobyUMjQmefP3nuWgCYLqkVKQQersxdkKbiQwa9HXzD9rY1bzviP1jRypzwi/d9aXWzFyWYN9ApEwaDVzU0noyOj4mT1l2zaXYFzSttaExPqBoCxYMmHsXZnlG2mldQZ5yoY3MSYeorZFdR6ag29K4m9gdhdVM7m0krV9OWkmrbNTj8e6+jL3X4CIY1g5BgzSB0+bgRCY8UBIOONIQE7eukGetWWDM7Mi4IHBNNkpDC07dEmAoIwjffe/aTs5XCnbSmCMeP+4dqHtBgpmIQdnOdarjRH1AuD4mzdlSwqts86gDMtr5y66xJyFoqsTNOjUoEXQxeODSDsuukTQUQjMeGZuqoDdRFonIGbU4vkQT+cGYSiDjJmn1hM86AGqHm0ECDnjRpE68JF+T8vH74ArOHffPrO2+pO/mAChYBQ+g/GgxJmsCwD/Po6Rmp0MBGPuLq1msYkrauXt/KjobrP9TJq1bY+rjAuA6u6oRpq26yb8Fdc+/a+2BIi/A3cuJmljPq2PwztSta75wJgxiA6ueDRM0mYaxh3wcgjt94KLJpZL68DP4bdLGVOyj55S2re/ibYT4Jn0/vO4OQZ9IxpGbBcnqbAaSW2bpkG13+paBIQJlsH0vQdsNtsvaZ11iujhxc9BTFzNxxMYoA0W3+gA4eCSTweAMg2DJwnL02ldHNHj3+uMu3rFxnaAWLZIogCgFhDVqoGVTtsZUpamikF7ePMvnH9oRtnvaTsBUYNye0rQVthzMGmbqPKB+fBXvbUk+FlwWQXBq8ZcB0fi6kG0vjpHB5vtv93pe3Y4VxgbUGIH+ABEJHCtyhi7LT57FK2LQxqeOxTCwKKfXCMiAxkiANxw5Wo3AvOBsF9QBsQCir5nf5jxbkvaToD3X2l+adH5ALqCBsKvl0UEQPwM28uXhPxKnP1yxv7DiqL84NyJHwXOIdm9PMsCLLqommwIcaKMpp/z76idhjyB5q/kJtB6OO6c9u5sMIAoUyjx4IlOBmusEQVnWniZQcZomg0EYAljvilru9B2ApSnE34vZR+/CFFDynharxGJwogEBjLsWwzPeZrWVa+Qp29aAvvsLbQtYZXMBQBzBsTwrr72BtQODjUXgJgp65NhB9JZFM4YSqECoM6uy1FQAELtFU6qatYEoLAat4WlxPceo+0EtG3b9hrX/KOH9VhALQSAt0EfN0hFg6vsUr58l9ZT72j+12ebS/PKzzsglr5YDcKEMNhQEMTPgwIAA+qJIADSBE0ADBguDiwaVkIIFY0sg4E2Iz74uHTwMqlxVqTaLFLi2pdoOzX8wpG2ax9k/uh95MLJ7RLB/ePv418tPqLvIyxnzJl95NsWTyXYaSUNAo6X5j/uXlKF28NcExgJAM4iEwEAY9JTxljMq+YC4Ehcl6yHbOl6KgoAZz4SfFZdKwGAsriXQj9DF1SrE9w8edzb42g7OaT0netxj8FAm6iMDhUArg1Fe8VZrMYv7ENz+tPyGxQco9+ZA8ERe16A2fP4Rk24APCkTPoZCI9SxljrUbUXAN2VEhgITEcqUmcaN7JqQvos1wRANca0XUutThACDCy9sTqNtpPDPXvnItASof0nAsDbz4ULNQ/fQVSPpnsmfjiPlt0Q8fPomV9+ADtyoAX4RpG6zod2PDjrtYHRBABcnPYJ5gJgT1yPAiAKjmhJG1FtGG9GuicDwqulsEGfQAMoMzcn03ZyyFM/yoGcBRgL9fCqiSAI2iu4/FQxGW4qS9v2nx+SE1mncN714C1S+p6DeF6PGIK006IwcAGAsGz7hEWmAhClC0CwzMsJwA8l7jaGWeX8etnsirCwNUd0wrJcEAAaZqbjwQWAu6RAmPQxe89hZ+cnb6HlNmhE9RzR2jWv/IJ6X08lCgJXoZT5XACQYAmogQDAJgxG4jQGiYbaj0VUa4SsydxTAMGAJSBpk2nk0pXwFgpAyG/FpYuu9zyiChHEzAMXbus5ojUts1HAPWD2vdLCU9/awQUSLmlWDajw2aDOiGrmvZwAvLlOFwDOHBSAGrhWlMFgL/Dwa9hn5H3KfE5g87hTt6+h7eRwvl6WhXYCnwQoAJrQawIQkhCTp1r8nkWnLjgHGCebNBrYB2Y+IuWdwfMCaiqXcXoUV4cQWPGuvLwA4N19gurkOQJGpDPKQABg55GnYNHPqAAYEZYNl0vPKz9sdkjEnbR5LW7dkvagwScwno8LZD+7F52qsg+a/ydaVqOENDj7cU/+ORQCBxqGqjag66nKTMaUlYzdGUkAEoMCQGPmtSXwEMBNFLUHZX4kIcAbxMATWM6Yd8K7w2lbpUFZj8qFF1DQgr8JD0urAlCJh0fkxaeq7C+k96VlNWp4Xy1+XMo/x+xwVAxUHGgCgfH8LywBYAS2jhAHEAUAf2PAmJoSdx3RtYP3hB25mgmAptFKqplc9D1Tkrdktp/+XufO6Z+2lyd9nOTOPh2ArWfdfdR8fSD8vaD2IQTuXXjykvOV3L/SPl8VkIbkPe7JO4Op3NDh0ABQ0AaAvX7vcHMBuANsADhbR5gRSWVfTkOEMMbElqD2AP+d3vZihh4BpK554FE0sGOnnU4OW+6I4Qd2hJR16ELsy4vrb3+/LiC/OKePK/dYlZpOHsp8LgCQEBJpLwC9ACIAZowH4ps6EY1Ebk8Y2AORSBQAzlhIP1OPnAVnOH4e4vJyryiA19JLGXsP3dpjSK3PNDRKOAem3x89/whmFGN2i74VqwnAcsaaDcoeSX/HYdeXgHDDTiQ+ozldTgB46DiSJjEifQ0n9gzWKa7zfBngQgFb35DCPmvzjuZ/eaphnfj9qSH3Ht7RXXDhOxz0EAEIYLKjf9wK09CqY8L6ZDg9TAWAMg6ZIOwY8jCx0X4ALgHad3lZ9DuRCAWACBz0KUQA9PW+Ut1GxvuHN7x/3XXXXdH5xkaLJk2ifqekbV8qlVYGwA7Q1SIadGr064+Z2xbT33FIk9aHuYGgtqkA4FqufS4KgagJ+NrPDbQQW8Hg+0BmwiGWEVYWFxIQdrAP4EzlmDWFt/1/e16hfE+vm91Jm7fAGm6HvAC6UQQDvJKxVulbculvOVpO/RAFAO8B0g03COqoJDIJXosCwNdhZApPBEXBM2CooEHE980EwIyA8XoyKgR4Cs8xx8C5b9J+XfWw3//C7z1z96vMh40RYcuYq39kBOTvp5gLwJ2TVqXDEmDH5/4FNUDYwPO/RAuEzHhBKEJnryqMqtYIL7tmxNU+XPBQrbp56dsuxjw58mXap6se8sP9m8lz9u4G5uJWsZYxhALAXSFNC+BtGsnb5tMyOKKHL3oOTgxFw6kf7o4ZBIRE7YDfMTAMKYkGnC4skYxHMxIMQ0hghS1u98R3t/k6dzM8mXRVQ+718s3y7F378KELsDtokC2kW8YweJCrP3PjKloOh33yuj/BxQvq4+CCzNYFQHhPZCAVACNm0/ewzFoIAO+HegYgwOBUkLLwFPO/uijrbpvtske4brbZfuMaWTK52ROJhkmmjQ5RHXv/zpNRvgUujaLXx6gDrjFJsJIhHNp6ztbDr5kYSL7Ja7uCEYVZPoIGoMzUmWLAXOquGRH/3EwAuNaizMfbyIrUDB7vrM/Oxjwx7BnaByO07NDRL41dvR3uAVIy9x2N6vkvhX6nUeG6W275tXvm59qaH3qJMw4sOfLMCYJEyuydhx43EYB7kt7v6kUBECJzBgzEz/juI2E4fW3E+MsJgMj04G5eACOd3tIA875WstLvdtTIv499ZOBjyszNX2O+f0GV+hzj2bsrbuv47K30u40CXWy2X7pnfLGeq301GSJcxXJCBqLhpe6u2VN3HjQ79fLAjBUPxoAbBWFW+D6mfAVJLFMtlxt15kw3Ivy9tnSYWf58ncd2l6i3m8Wm77jYJn7GMNpuIzCY+S/NGuOefxj3/7F9mjBBPERJ37XFd99zv6W/a/CQxm8o9q5RXT1IBjGahZTwcxj0txhrkbIDzgYa3pLp+Pvwu+TsU+hP428NmB/CSGG/PVL99PfUjzciLBM0BGzhFl5k/sSV6/7Q8YEa3Vd0b/PmzfxvFL+rLA0wzKaG3UBtjLg2gecex6Rt/cTfmJ5e6np95XhQZXYYULy0ga/1kRmgE9x8Mf9Ila/Hc4bXwUldn/TI8yq0u/7Cl5MQErKGVJ8/tH5Rc4SWETnPkLuKaOHDWcZZG896nx5X48MasT36Pxg7+cMTsPEFmgyNYyGUHLRtqlEIPBM/qtWtpPWG6PhFf3OXfofMMZrxYifDmMXXWthVW3SWNev5kmE2TOeHHpO8WeVVuJfAM3ZNyuIqOlKd9CoWyuwQxnNDD+L4kK8Ht3e+XrT4zjjFRdtpBLhhPCY+dbIn8wBqOsyZNNwUE8asiDHfKsZ8Y9c07EfYOnqPl+Tsk+fUnb6gOgsbcN4xg89gkKUSxpw5Z9ivuz4Lt4OGATJvpJTte8HF0hljUD5+VhMBMPqdAakWvnq03LecMd+Mj7b7H3vlEdo+Myh3dWrnfmP5Ri/kSeLdSjxr2pj5+BrPJah1ekq/Y8rIwj/TchsE4Ki4e9rnm/E+XsGlq63hhYMNWUGlVSxuaIbhcSuAZ87uzXAsXWeMQZCHzloxDmCk3o3e44T9KGVomLlTt33vH5z25n21uNi69YvTh7pTtlShoVcU1I6iYWw0TrjUcE8DIomZ+79xd+t1Oy2/3uEet3oUXPqMx8R11ygYoaMdMyM1t6+aKW8xFjN+5T9oPRz+pE1bIe08KGjhZYUwEQUgOMB8jTUifcD5e8XqxdbeRaeYf3TpCt899xjeD2yEuE4PxvonvPu2b0mARYPnQma7IdO1JSkksgkXX8HR+TWMOadtWk7rqVe4+ox2ygtOfK/esad2ig8gSrDGWNGt4u/TzqPLBmlhcOByzNJ4WhdH89dWrcJ7BLS6LisAWGcwLSuSAKBdAUJQyDA5xVtaxXyT123xPzrwAdoOM4BGjPvXtBHe1O2XMPyND7QKZ7r4Px8f8ZQQd2W50Qn2imd5NfO+urgnrbPe4Jr2WRHsbYsdFAdY338XL2XQtANlGg4K7NuvYixu0tpFtC4O55jVS/B6FxL2NRMArpHCmR1OOOAQjFrOWFzq5qOtXpz6olnGrxH8XXq2841e+W8QHJz1+ao3RJmPTOcGqJaYSnMVRA2q9kM9Pu9J37sfbjilddc57E9MaQsPZYguVlW/KACRUrXpPj0yXlgX8cFMEz8wfVhzm0nrpqEAaNu/tCzR/bs8qSFdJ5QFV77AUa/kL85542e/0fFa2+9o3WboYrP9Jm5IZpJ37h7MBxTXeiqcnPEhgSutPSG5h3ynVAw5g2sIHshrS+v/oKhn5qYcuKyBr5ucQjoNMXszP52QLkBljPnn7PiU1sfhGJo/AG4JQabxmWIw0OLAGhL4+0CQyAnb0Gm7LrUcVZBxT9u2tTqC7e87snfMtI++glNNcBcArNd8n4NSeMxBe99g2TIjuEXFlbxzv80kXF4n8PVN+K2cfeI8XFjI1atulJl0mr4vUsgSAk/VmHfQVADaDEnv510KalPzBAzK0+s2GEBOGHSCu/7m7mHuYQuz2rTvKNO6IqFdp06Kf8yyZd7FZ9Gvx5vTTQTxclQbAYCraZQlVcwzIrf+Do/IY1c8i4ce+SwU1n29U4ZRNmMSlw6YkVLarvPuDh1uo/UClKdHt3TnnlEfQyMMDGe2EdNVLwCun1UvWobdupYLj7OW40pKOnTrU6vH07Sz2X7bakTOZG/69m/hHAM+CQRVtRr/0PtPx0NgMu2/4Wf8f4O/kE2szPwsibatzuBM3pKLZ/SI24TrlgHzIwmAPvO5BQ5PC5l/hCl9nnPSegHe+x64Q0rbXQUBEspoM4J6YI33wjZt5j7WZtI7eff2ef4+Wvbl0PqlqQOUGRvLwVWFxBR+5g/7QBgq3lVgymSTz+gxdPp9fHLI3H2mWvInBdwO5kjdsyMacvip36x1mF9xrl5zHlkQuLGjlwHh4KJLzDdwmuGzca632W5wTd98AlLIKaNpO8BOgC1aOHImp+2olEYWzGnV7ZFWtMzLod3TI3vFTH5/g6e4EhM9MCWNB5gMrHu8kYQnqorjIbZN67v+v0Z6WcJnetmc4O7k7GOn23ftanhH4U8Kp/OWX8tzvjobrfn+fLdNHPyQk7eRBMCAcbjGQaAnPmMgrRvQw2a7Ji5l6wHYheP14l9ui0AZMOiQhAlP3Zqz51Ls6JIUpe0farRTJyKuxxP3eMetLvLlnUXvpAVa9+Ghbv6/3k9yIwnNWqZbzFxzimXoAgPva+Om/waWsbxvznSbnFv3t4Xf3CLmN3LmwbMohRGCKthp3gEuuTUQAAkCHnDM6s3VptmzMdM3rMBTt4IAQAIm5NyDrwwq2pP02dHYEQWjO3f+S40SM0Tc2/eFO+PGlpX6FhzGAxz47EHNJYtk6PE+IgPpWBjkFYh2i5EAqOOnahT8jJcHO5F5Z8/Wy3XxN9100/9Gpe49BqpVTIsyI10QDNY+IwFwwe1bqxnzzfzI7CZuW8ykd2arFzFrOQfwLCGY7SXfM9+sjXtaj5g3Qr4G0uxqB5+vlafN2GWFMdmHUAjhgmlYg3Uj1UDbQT/01yYCYEYhKl/7LZ/5XGgMhQc0QPaxk/X2KHt3yvY1yIAaCIBIYmdVy9ng95qR0zLlsy9pvRztxi3tB8tEC/AYyhjzLTjGYia//3abwVP7drgC/9ihxLnkEbnpUuq2S5DZgw+91I5/c6LtFIWav4cMxVvJwr9vRKhRiADwCRNJAGDsXSk7PqT9qDP4J74/AHLXeDCmpoRGD5JxtI67gri+J28/HBUVZSjhUr/x3WOKK5knfefJmIS8+Xf+Y9AVHa6865FnfZ6Ri5PcKdsuYiAHtrO5gJLZqbcRE0bUx7bg84l5XoKg0i9HfCkUx0L/n9dHw8PaEgOBJh+4gZPXDqD9qTPE3d2tiZJx8BSEPWsaZ9cJDTaDmc8DSQWV6Ks7M8vZ7R0fNAzOOHrG39pmcErf+6KuvaKcufa9+rdvO35VsW9eufqgaYwsmq/tKrM0g1cTAjn3JFNKq9Wng4I9pAWmRFJPK4XOZJzN4kOgBBJdSiNhAtcQsqxd6fuOtb7/fsPJUWfwDMnt7VtaqT7/1kiVk46J/+vuj/gdbQbAALRYwtgfFn51/umH7ja8iftK4Xt0YJuWiSsLlazDmMQJql5NHA1fj3XGw18+O0FA4ZlERZXMHZ/8D//o4u7epM3LlPlHzvhgowaEAZcPrhnUfkv65RPaEmcwRnxs9FQ3LcagPytJu0LGW3KBOeIzHqJ9qxdIr60Y5i25qD58wWAG0M6p7pqmQoHECCKoUxAm8NnfZuzu0tPsnoFjDDODaon/atVvzCMtJ6z9UM6qQKseGC+q+JAIHndXNXcO2ycYgJAL6Mo+cV752990H7zVn3vd3G7yur+703YWSDknj/kgzAyPvQUNCdoBHw4NHk4VkwqBjJfOkDHSSTVy4T5m9+LTla5hxfX3wEgjSMMLusvz9u+Cu3JAHUrARFwbVfXHZzm+xpiA9jRxOCkLvwHrHXbh4EkeWRXnpPSdn8Qkb3zTOzy7o61tjyve9vTbbDe0HTLnBWXyh5s8eefRcAoyPtT4CpnxJGZBGQR5AvLsPdtpfRytOvX9dcvRxV29MzbMdKbu+EJZcOysoiWQwuYZLJs4RtoTw/GpK/igCJUgvA6TAT6HGQ8C6ymtZO60rZ/Yn5/xR1pfgwA+Lv21on4xs/cuV7KPfO0quMRkbZcNwq8YkAEC/xzu1Fn0DfPMO3pemXtgqzxrc5GU+M4YaeSi7sr9D/1glR93f4/YliMLxnuSPv/Kt0wVMLizPxi84bGI8DVfZL6RAABpt3abHmCl8Hd/pqlvZEFXadw7YzwzN+V7M8s3urOPnnbnnmKewkvMAy4dtFMjBZ6iXhxgzuxTTJl3cLc3adNc1+A5NX4GYr3D07Hj75yDMtpL8Ysfi5u1qV9cbkW/uOwD/dpk7unnerWon2twZjf78zNa2u/v84OZzdHTZvvfVgMmPBKbuKrQl7FfzSqCzFt4sgi6W6E7jjSSZyQA+FoUADxSrt1jNOPfT9E21AZx3bo1cTw10escNLejPDyv1x3x2f1aDC/qd8eQ/H6O+PlPS8Oy74Onm9UmGeX/Hbr5/de265fQJWZkYYo3afN+pbgS1TzeSyhsMnHmUuYbCYAoCPx/LgDos8PTSRdfYFFPjW+cN3heTfirz3dj66kf7FXWMTXPXns2D2W20XtGn5uRKAAQJ3DNPVBx6623XrFtYuFHhDT5P5MgIIVnEEXGaWqf70RSptaE+XznTRQAsMRdSZ+bXmFjoY4RPWRhZ3CtVCtaY6jGMIyikR3ISEwXPwPPxShJExJApPGra3wMzMJPDL/ff61zTvkJ9LVJMAp8bTEXgTLcjEAQuOsq+uv4wOac05di+49pRtthoR7hTtpaAq6eUTSSh14x0keEIJJgiAKA4VztmYZyyvbPaP0W6hkxiav6gNvH8xNFxoux95o+a9AwDg/PMgD/f9zqN2j9FuoZUpfuTV2ZFRcxRKttTF2pAPBdOV3ta2s/Ri0Xnq20PzrETeu30ADgnLG5iD+pGwVA3IHTQ9DGAhB8P3jXoCgA8BnE9ZW0netpvRYaCBxDFnWH0DP3BoJaQN2J05NTBfdOjPqp7/FE1lD1D5rDB+v/iAa2CWMhiKZNbde60/Yehs0T0RuQDHbgdMMQZj2kYEEWjqYxUBMIGT1YFoSVM/efjIpqXb/77xYiQx63JkHNUgrOXl0A4C+1Cwzi/SHJl9r9Ru41jMkT1yfS+iw0MMT9Lb6JJ+fkaTUmQOwAAxLVvC4wNPduCWPuBccuNn94sOX7NwY43lwzDY5NGeUqXo759LuQywD796433zN9MKSFBga4kVzKOnpKPTVkHhii71Piiane3ONfe3q/WONj4hYaAJSxq16Am7WiYY/AIDwcFABhSRCvm9eihqBJ3GNWjqLlW2j4+Jk064uP8aIJg9ktCoKs5eHzwxjqk0iqMetHStm2CR4BTwu30Ahw+6Mj3UrO0W/xMgWTtHXuIbhAU2AsAEjL+cs+8p396fFW1K8xwz8i92FP8QU8xq0yXYgPoPoH97ASs3XVPEH1oVXe0gtMeTmjDy3PQiOEY1j+M7780wH1MTPEJsALIypRCMD3x3sA888w5XXzK+osNEL4BmX+yT1vXzncZQjq3Ql5fXCGAQ6UwgYSPNgBLmbOPrjf3j/1Qfp7C1cBmjocTWKnrB8jZR3eL+dfZDGQsg7p2HARxYJD5dKkD8e3V5S6v2zBQt2iqc12bdzogtg/F1TE3VVQEecbXRrrtNl+Rb9nwYIFCxYsWLBgwYIFCxYsWLBwNeH/AKrLzhLO/UQkAAAAAElFTkSuQmCC" alt="Algo Quant"><div><div class="hero-brand-name">Algo Quant</div><div class="hero-brand-tag">نظام إدارة الأكاديمية</div></div></div>
+    <div class="eyebrow">دليل استخدام النظام</div>
+    <h1>دليل استخدام النظام</h1>
+    <p>مرجع عملي لصاحب النظام والموظفين: من إعداد الأكاديمية لأول مرة، لغاية الاستخدام اليومي لكل قسم — العملاء، الطلاب، الكورسات، المالية، والمحافظ.</p>
+    <div class="hero-meta">
+      <span>آخر تحديث: 10 أيلول 2026</span>
+      <span>6 صلاحيات وظيفية</span>
+      <span>يُقرأ من اليمين لليسار</span>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-toc" id="mobileToc">
+  <a href="#start">البداية</a>
+  <a href="#roles">الصلاحيات</a>
+  <a href="#dashboard">الرئيسية</a>
+  <a href="#crm">العملاء</a>
+  <a href="#students">الطلاب</a>
+  <a href="#courses">الكورسات</a>
+  <a href="#tasks">المهام</a>
+  <a href="#finance">المالية</a>
+  <a href="#wallets">المحافظ</a>
+  <a href="#chat">الدردشة</a>
+  <a href="#reports">التقارير</a>
+  <a href="#notes">ملاحظات</a>
+</div>
+
+<div class="layout">
+<main>
+
+<section id="start">
+  <div class="section-head"><span class="section-num">01</span><h2>البداية السريعة — أول مرة بتشغّل فيها النظام</h2></div>
+  <p class="section-sub">هاد الترتيب مو اعتباطي: كل خطوة بتعتمد على يلي قبلها. اتبعها بالتسلسل قبل ما تبلش تنشئ كورسات أو تستقبل عملاء.</p>
+
+  <div class="callout warn">
+    <span class="icon">🔑</span>
+    <div><b>بيانات الدخول الافتراضية:</b> البريد <code class="cred">admin@algoquant.local</code> وكلمة المرور <code class="cred">Admin123!</code>. غيّرها فورًا من "الإعدادات ← الموظفون والصلاحيات" — إذا ظلّت زي ما هي، أي حدا بيعرف يدخل على حساب الآدمن.</div>
+  </div>
+
+  <ol class="steps">
+    <li><b>سجّل الدخول</b> بحساب الآدمن، وبدّل كلمة السر من نفس الشاشة (فوق).</li>
+    <li><b>أضف مسارات التدريب</b> من <span class="path">الإعدادات ← مسارات التدريب</span> — متل "الذكاء الاصطناعي" أو "التداول". هاد التصنيف الأساسي يلي رح تتبعله كل الكورسات والعملاء المحتملين لاحقًا.</li>
+    <li><b>جهّز قوالب مسار المهام</b> من <span class="path">الإعدادات ← قوالب مسار المهام</span> لكل مسار. القالب بيحدد المهام يلي بتتولّد أوتوماتيك (تسويق، لوجستيات، تشغيل...) موزعة على 5 مراحل حياة الكورس — شوف التفصيل بقسم <a href="#courses">الكورسات</a>.</li>
+    <li><b>أضف الموظفين وحدد صلاحياتهم</b> من <span class="path">الإعدادات ← الموظفون والصلاحيات</span>. كل موظف فيك تعطيه أكتر من صلاحية بنفس الوقت (مثلاً عمليات + محاسبة). التفصيل الكامل بقسم <a href="#roles">الأدوار والصلاحيات</a>.</li>
+    <li><b>راجع مصادر العملاء وبوت التأهيل</b> من <span class="path">الإعدادات ← مصادر العملاء</span> و<span class="path">بوت التأهيل</span>. النظام جاهز بـ4 مصادر أساسية (وسائل تواصل، مبيعات، توصية، بوت)، وفيك تضيف مصادر إضافية إذا بدك. إذا رح تربط بوت تأهيل خارجي، انسخ رمز الـ Webhook من هون.</li>
+    <li><b>اضبط فئات المصروفات والعملة</b> من <span class="path">الإعدادات ← فئات المصروفات</span> و<span class="path">العملة</span> (افتراضيًا الليرة السورية).</li>
+  </ol>
+
+  <div class="callout note">
+    <span class="icon">✅</span>
+    <div>بعد هاي الخطوات، النظام جاهز: فيك تنشئ أول كورس (قسم <a href="#courses">الكورسات</a>) وتستقبل أول عميل محتمل (قسم <a href="#crm">العملاء المحتملون</a>).</div>
+  </div>
+</section>
+
+<section id="roles">
+  <div class="section-head"><span class="section-num">02</span><h2>الأدوار والصلاحيات</h2></div>
+  <p class="section-sub">6 صلاحيات ثابتة بالنظام. الموظف فيه ياخد أكتر من وحدة سوا، وكل صلاحية بتفتحله صفحات وأزرار محددة فقط.</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>الصلاحية</th><th>مين بياخدها عادةً</th><th>شو بيقدر يعمل</th></tr></thead>
+    <tbody>
+      <tr><td><span class="role role-admin"><span class="dot"></span>آدمن</span></td><td>صاحب النظام</td><td>وصول كامل لكل الصفحات، وهو الوحيد يلي بيقدر يعدّل الإعدادات، يحذف موظف/عميل، ويشوف سجل النشاط.</td></tr>
+      <tr><td><span class="role role-sales"><span class="dot"></span>مبيعات</span></td><td>فريق البيع</td><td>صفحة العملاء المحتملين كاملة، وتحصيل الدفعات عند التسجيل.</td></tr>
+      <tr><td><span class="role role-media"><span class="dot"></span>ميديا</span></td><td>فريق المحتوى/الإعلان</td><td>مهام الميديا بلوحة المهام، وملفات الكورسات من نوع "ميديا".</td></tr>
+      <tr><td><span class="role role-operation"><span class="dot"></span>عمليات</span></td><td>منسّق الكورسات</td><td>إدارة الكورسات والجلسات والطلاب والحضور، ربط قوالب المهام.</td></tr>
+      <tr><td><span class="role role-instructor"><span class="dot"></span>مدرّس</span></td><td>المدرّسون</td><td>تسجيل الحضور بالكورسات المُسندة له فقط، ومتابعة محفظته.</td></tr>
+      <tr><td><span class="role role-accountant"><span class="dot"></span>محاسبة</span></td><td>فريق المالية</td><td>صفحة المالية كاملة، الموافقة على السلف وطلبات السحب، وتحصيل الدفعات.</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="callout note">
+    <span class="icon">💬</span>
+    <div>صفحات الرئيسية، الكورسات، لوحة المهام، المحافظ، والدردشة متاحة لأي موظف مسجّل دخول — بس المحتوى جواتها بيتغيّر حسب صلاحيته.</div>
+  </div>
+</section>
+
+<section id="dashboard">
+  <div class="section-head"><span class="section-num">03</span><h2>الرئيسية</h2></div>
+  <p class="section-sub">أول شاشة بتفتح بعد الدخول — لوحة مؤشرات بتتغيّر حسب صلاحيتك.</p>
+  <div class="who"><span class="who-label">تشوفها:</span><span class="role role-admin"><span class="dot"></span>الكل</span></div>
+
+  <div class="grid-3">
+    <div class="mini"><b>مؤشرات عامة</b><p>عملاء محتملون جدد آخر 7 أيام، كورسات نشطة، مهام متأخرة — وللمحاسبة: الإيراد الشهري وطلبات السحب المعلّقة.</p></div>
+    <div class="mini"><b>قسم خاص بصلاحيتك</b><p>ميديا: مهامك المعلّقة/المتأخرة. عمليات: جلسات اليوم. مدرّس: رصيد محفظتك وجلساتك القادمة. محاسبة: مصروفات اليوم.</p></div>
+    <div class="mini"><b>مبيعات</b><p>متابعات اليوم المستحقة، وقمع توضيحي لحالة العملاء المحتملين (جديد ← مهتم ← مدفوع...).</p></div>
+  </div>
+</section>
+
+<section id="crm">
+  <div class="section-head"><span class="section-num">04</span><h2>العملاء المحتملون (CRM)</h2></div>
+  <p class="section-sub">من أول تواصل مع عميل محتمل لحد ما يصير طالب مسجّل وبيدفع فعليًا.</p>
+  <div class="who">
+    <span class="who-label">يديرها:</span>
+    <span class="role role-admin"><span class="dot"></span>آدمن</span>
+    <span class="role role-sales"><span class="dot"></span>مبيعات</span>
+    <span class="who-label" style="margin-right:10px">التحصيل أيضًا لـ:</span>
+    <span class="role role-operation"><span class="dot"></span>عمليات</span>
+    <span class="role role-accountant"><span class="dot"></span>محاسبة</span>
+  </div>
+
+  <div class="card">
+    <b style="font-family:'Cairo',sans-serif">مصدر العميل</b>
+    <p style="margin:8px 0 0;color:var(--ink-soft)">4 مصادر جاهزة بالنظام: وسائل التواصل، مبيعات، توصية، وبوت التأهيل (تلقائي عبر Webhook). فيك تضيف مصادر إضافية من الإعدادات إذا احتجت.</p>
+  </div>
+
+  <b style="font-family:'Cairo',sans-serif;display:block;margin-top:22px">مسار حالة العميل</b>
+  <div class="pipeline">
+    <div class="stage"><span class="bullet"></span><div class="txt"><b>جديد</b><p>عميل دخل للنظام يدويًا أو عبر البوت.</p></div></div>
+    <div class="stage"><span class="bullet"></span><div class="txt"><b>تم التواصل</b><p>أول اتصال/رسالة من المبيعات.</p></div></div>
+    <div class="stage"><span class="bullet"></span><div class="txt"><b>مهتم</b><p>عبّر عن رغبة جدّية بالتسجيل.</p></div></div>
+    <div class="stage"><span class="bullet"></span><div class="txt"><b>مدفوع → مسجّل</b><p>بعد الضغط على "تسجيل وتحصيل" (شوف التنبيه تحت).</p></div></div>
+    <div class="stage terminal"><span class="bullet"></span><div class="txt"><b>خسران / أرشفة</b><p>حالات نهائية — ما فيها رجوع.</p></div></div>
+  </div>
+
+  <b style="font-family:'Cairo',sans-serif;display:block;margin-top:24px">خطوات العمل اليومي</b>
+  <ol class="steps">
+    <li>عميل جديد بينضاف يدويًا (زر "+ عميل جديد") أو أوتوماتيك من بوت التأهيل — وبالحالة التانية بتوصل إشعار فوري لكل فريق المبيعات.</li>
+    <li>افتح ملف العميل: ضيف ملاحظات، حدد "موعد متابعة"، أو أعد إسناده لموظف تاني.</li>
+    <li>غيّر الحالة حسب تقدّم المحادثة (جديد ← تم التواصل ← مهتم...).</li>
+    <li>لما يصير جاهز للتسجيل الفعلي، اضغط <b>"تسجيل وتحصيل"</b> — بيفتح نموذج فيه الكورس (مفلتر حسب مسار العميل)، والمبلغ وطريقة الدفع. الضغط عليه بينشئ الطالب، يسجّله بالكورس، ويسجّل الدفعة الحقيقية بخطوة وحدة.</li>
+  </ol>
+
+  <div class="callout warn">
+    <span class="icon">⚠️</span>
+    <div><b>مهم:</b> تغيير حالة العميل يدويًا إلى "مدفوع" من القائمة المنسدلة وحده — ما بسجّل ولا ليرة. الدفعة الحقيقية والتسجيل الفعلي بيصيروا بس من زر "تسجيل وتحصيل".</div>
+  </div>
+</section>
+
+<section id="students">
+  <div class="section-head"><span class="section-num">05</span><h2>الطلاب والتسجيل</h2></div>
+  <p class="section-sub">ملف كل طالب: تسجيله بكورس، أقساطه، حضوره، وشهادته.</p>
+  <div class="who">
+    <span class="who-label">تديرها:</span>
+    <span class="role role-admin"><span class="dot"></span>آدمن</span>
+    <span class="role role-operation"><span class="dot"></span>عمليات</span>
+    <span class="who-label" style="margin-right:10px">قراءة فقط لـ:</span>
+    <span class="role role-sales"><span class="dot"></span>مبيعات</span>
+  </div>
+
+  <ul class="plain">
+    <li><b>التسجيل بكورس:</b> من ملف الطالب ("+ تسجيل في كورس") أو من داخل الكورس نفسه (تبويب "الطلاب المسجلون"). السعر الافتراضي هو سعر الكورس، بس فيك تعدّله لطالب معيّن.</li>
+    <li><b>الدفعات/الأقساط:</b> زر "دفعة" على أي تسجيل — كل دفعة بتضاف على المدفوع سابقًا، وما فيك تتجاوز السعر الكامل. حالة الدفع (غير مدفوع / جزئي / مكتمل) بتتحدّث أوتوماتيك.</li>
+    <li><b>الحضور:</b> بيتسجّل من صفحة الكورس (تبويب "الجلسات"). أول ما تسجّل حضور جلسة، بيتم احتساب أجر المدرّس عنها أوتوماتيك بمحفظته.</li>
+    <li><b>إكمال الكورس:</b> بعد تسجيل حضور آخر جلسة، الكورس والتسجيل بيصيروا "مكتمل" أوتوماتيك، وبتتولّد حملة تقييم للطلاب تلقائيًا.</li>
+    <li><b>الشهادة:</b> زر "شهادة" بيظهر بس إذا الكورس مكتمل والدفع كامل 100%.</li>
+  </ul>
+</section>
+
+<section id="courses">
+  <div class="section-head"><span class="section-num">06</span><h2>الكورسات</h2></div>
+  <p class="section-sub">إنشاء كورس، ربطه بمسار مهام، ومتابعته من البداية للأرشفة.</p>
+  <div class="who">
+    <span class="who-label">تديرها:</span>
+    <span class="role role-admin"><span class="dot"></span>آدمن</span>
+    <span class="role role-operation"><span class="dot"></span>عمليات</span>
+  </div>
+
+  <ol class="steps">
+    <li>إنشاء كورس جديد: الاسم، المسار، قالب مسار المهام (اختياري)، تاريخ البداية، عدد الجلسات، إجمالي الساعات، السعر، السعة، ومدرّس رئيسي (اختياري مع نسبة أو أجر بالساعة).</li>
+    <li>عند الحفظ، النظام بيولّد جلسات أسبوعية أوتوماتيك من تاريخ البداية.</li>
+    <li>إذا حددت قالب مهام، بتتولّد كل مهامه أوتوماتيك بتواريخ استحقاق محسوبة (شوف الخط الزمني تحت).</li>
+  </ol>
+
+  <b style="font-family:'Cairo',sans-serif;display:block;margin-top:22px">حالة الكورس (تلقائية بالكامل)</b>
+  <div class="lifecycle">
+    <div class="node"><b>مسودة</b><span>draft</span></div>
+    <div class="node"><b>مخطط</b><span>planned</span></div>
+    <div class="node"><b>مفتوح للتسجيل</b><span>enrollment_open</span></div>
+    <div class="node"><b>نشط</b><span>active</span></div>
+    <div class="node"><b>مكتمل</b><span>completed</span></div>
+  </div>
+  <p style="color:var(--ink-soft);font-size:.9rem;margin-top:10px">النظام بيحرّك الكورس عبر هاي الحالات وحده حسب التواريخ. الحالة الوحيدة اليدوية هي "أرشفة" (تتطلب سبب).</p>
+
+  <b style="font-family:'Cairo',sans-serif;display:block;margin-top:24px">مسار المهام — 5 مراحل حياة الكورس</b>
+  <p style="color:var(--ink-soft);font-size:.9rem;margin-top:6px">كل قالب مهام بتحدد فيه مهمة لكل مرحلة، مع التخصص المسؤول عنها (مبيعات/ميديا/عمليات/لوجستيات/محاسبة):</p>
+  <div class="lifecycle">
+    <div class="node"><b>قبل البداية</b><span>قبل التاريخ بأيام محددة</span></div>
+    <div class="node"><b>البداية</b><span>مربوطة بأول جلسة</span></div>
+    <div class="node"><b>أثناء الكورس</b><span>جلسة محددة أو موزّعة</span></div>
+    <div class="node"><b>النهاية</b><span>مربوطة بآخر جلسة</span></div>
+    <div class="node"><b>بعد النهاية</b><span>بعد آخر جلسة بأيام محددة</span></div>
+  </div>
+
+  <b style="font-family:'Cairo',sans-serif;display:block;margin-top:24px">تبويبات صفحة الكورس</b>
+  <ul class="plain">
+    <li><b>دورة الحياة:</b> مهام الكورس مجمّعة حسب المرحلة، مع فلاتر حسب التخصص.</li>
+    <li><b>الطلاب المسجلون:</b> قائمة الطلاب + تسجيل طالب جديد مباشرة.</li>
+    <li><b>الجلسات:</b> تعديل تاريخ/وقت كل جلسة، وتسجيل الحضور.</li>
+    <li><b>التقييمات:</b> إنشاء حملة تقييم ونسخ روابط التقييم لكل طالب.</li>
+    <li><b>المالية:</b> الإيراد والمُحصَّل والمتبقي، وزر تسجيل دفعة.</li>
+    <li><b>الملفات:</b> رفع وتصنيف ملفات الكورس (مواد، ميديا، شهادات، أخرى).</li>
+  </ul>
+</section>
+
+<section id="tasks">
+  <div class="section-head"><span class="section-num">07</span><h2>لوحة المهام</h2></div>
+  <p class="section-sub">كل مهام كل الكورسات بمكان واحد، بشكل كانبان.</p>
+  <div class="who"><span class="who-label">يشوفها ويستخدمها:</span><span class="role role-admin"><span class="dot"></span>الكل — كل واحد بيشوف مهام تخصصه فقط</span></div>
+
+  <ul class="plain">
+    <li>4 أعمدة: جديد، قيد التنفيذ، مكتمل، متأخر.</li>
+    <li>اسحب البطاقة بين الأعمدة، أو افتحها لإعادة الإسناد — النظام بيقترحلك الموظف الأنسب حسب حمل شغله الحالي.</li>
+    <li>أي مهمة يفوت وقتها بدون إنجاز بتنقلب "متأخر" أوتوماتيك، وبتوصل إشعار للموظف المسؤول.</li>
+  </ul>
+</section>
+
+<section id="finance">
+  <div class="section-head"><span class="section-num">08</span><h2>المالية</h2></div>
+  <p class="section-sub">الصورة المالية الكاملة للأكاديمية — إيرادات، مصروفات، وسحوبات.</p>
+  <div class="who"><span class="who-label">حصرًا لـ:</span><span class="role role-admin"><span class="dot"></span>آدمن</span><span class="role role-accountant"><span class="dot"></span>محاسبة</span></div>
+
+  <div class="grid-3">
+    <div class="mini"><b>نظرة عامة</b><p>بطاقات: إيراد، مصروف، صافي ربح، تدفق نقدي — مع رسم بياني للإيرادات مقابل المصروفات.</p></div>
+    <div class="mini"><b>مصروفات</b><p>سجل كل المصروفات، وزر "+ مصروف" لإضافة واحد جديد (فئة، مبلغ، سبب، تاريخ، وربطه بكورس اختياريًا).</p></div>
+    <div class="mini"><b>سحوبات</b><p>سحوبات المالك من الأرباح (آدمن فقط)، وطلبات سحب محافظ الموظفين (موافقة ثم دفع).</p></div>
+  </div>
+</section>
+
+<section id="wallets">
+  <div class="section-head"><span class="section-num">09</span><h2>المحافظ والرواتب</h2></div>
+  <p class="section-sub">محفظة رقمية لكل موظف: راتبه، أرباحه من الجلسات، سلفه، وسحوباته.</p>
+  <div class="who">
+    <span class="who-label">"محفظتي" لـ:</span><span class="role role-admin"><span class="dot"></span>أي موظف</span>
+    <span class="who-label" style="margin-right:10px">إدارة كل المحافظ:</span><span class="role role-admin"><span class="dot"></span>آدمن</span><span class="role role-accountant"><span class="dot"></span>محاسبة</span>
+  </div>
+
+  <ul class="plain">
+    <li><b>محفظتي:</b> رصيدك، سجل الحركات الكامل (رواتب، أجر جلسات، حصة أرباح، سحوبات، سلف)، وزر طلب سلفة (للموظف براتب ثابت فقط) وزر طلب سحب.</li>
+    <li><b>كل المحافظ:</b> قائمة كل الموظفين وأرصدتهم، مع سجل تفصيلي لكل واحد.</li>
+    <li><b>الطلبات:</b> الموافقة أو الرفض على طلبات السلف، وتحريك طلبات السحب عبر مراحلها (قيد المراجعة ← موافَق عليه ← مدفوع).</li>
+  </ul>
+
+  <div class="callout note">
+    <span class="icon">🔁</span>
+    <div>الرواتب الشهرية بتنزل أوتوماتيك بتاريخ الاستحقاق المحدد لكل موظف (مو زر يدوي)، وبتخصم أي سلفة موافَق عليها قبل ما تصرف الباقي.</div>
+  </div>
+</section>
+
+<section id="chat">
+  <div class="section-head"><span class="section-num">10</span><h2>الدردشة والإشعارات</h2></div>
+  <p class="section-sub">تواصل داخلي فوري بدون الخروج من النظام.</p>
+  <div class="who"><span class="who-label">متاحة لـ:</span><span class="role role-admin"><span class="dot"></span>كل الموظفين</span></div>
+
+  <ul class="plain">
+    <li><b>3 أنواع محادثات:</b> خاص (بينك وبين موظف)، قناة الفريق (الكل عضو فيها تلقائيًا من أول يوم)، وقناة لكل كورس.</li>
+    <li>مرفقات ملفات، وحد أقصى 60 رسالة بالدقيقة لكل مستخدم.</li>
+    <li>إشعارات فورية: عميل جديد أو مُسند لك، مهمة متأخرة، تقييم جاهز، طلب سلفة/سحب وتغيّر حالته.</li>
+  </ul>
+</section>
+
+<section id="reports">
+  <div class="section-head"><span class="section-num">11</span><h2>التقارير</h2></div>
+  <p class="section-sub">6 تقارير جاهزة، كل وحد بيشوف يلي يخصّه فقط.</p>
+
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>التقرير</th><th>الصلاحية</th><th>المحتوى</th></tr></thead>
+    <tbody>
+      <tr><td>الأرباح والخسائر</td><td><span class="role role-admin"><span class="dot"></span>آدمن</span> <span class="role role-accountant"><span class="dot"></span>محاسبة</span></td><td>إيراد، مصروف، سحوبات المالك، وصافي الربح.</td></tr>
+      <tr><td>الحملات التسويقية</td><td><span class="role role-admin"><span class="dot"></span>آدمن</span> <span class="role role-sales"><span class="dot"></span>مبيعات</span></td><td>عدد العملاء حسب المصدر، ونسبة التحويل لكل مصدر.</td></tr>
+      <tr><td>طلب العملاء (البوت)</td><td><span class="role role-admin"><span class="dot"></span>آدمن</span> <span class="role role-sales"><span class="dot"></span>مبيعات</span></td><td>تحليل بيانات التأهيل من البوت: المجال، التصنيف، ومدى الجدية.</td></tr>
+      <tr><td>أداء الموظفين</td><td><span class="role role-admin"><span class="dot"></span>آدمن فقط</span></td><td>ترتيب الموظفين حسب التقييم.</td></tr>
+      <tr><td>أداء الكورسات</td><td><span class="role role-admin"><span class="dot"></span>آدمن</span> <span class="role role-operation"><span class="dot"></span>عمليات</span></td><td>نسبة الامتلاء لكل كورس.</td></tr>
+      <tr><td>تقييمات الطلاب</td><td><span class="role role-admin"><span class="dot"></span>آدمن</span> <span class="role role-operation"><span class="dot"></span>عمليات</span> <span class="role role-instructor"><span class="dot"></span>مدرّس</span></td><td>متوسط التقييم عام ولكل كورس.</td></tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section id="notes">
+  <div class="section-head"><span class="section-num">12</span><h2>ملاحظات ختامية</h2></div>
+  <p class="section-sub">أشياء جاهزة بالنظام من الخلف، بس ما إلها زر أو نموذج بالواجهة لهلق — ما تدوّر عليها، واحكي مع فريق التطوير إذا احتجتها فعليًا.</p>
+
+  <details class="appendix">
+    <summary>عرض القائمة (6 ميزات)</summary>
+    <ul>
+      <li><b>مشاركة الأرباح مع الشركاء</b> — حساب وتوزيع حصص الأرباح على الشركاء حسب نسبة كل واحد.</li>
+      <li><b>استرجاع المبالغ (Refunds)</b> — إعادة مبلغ لطالب.</li>
+      <li><b>إلغاء دفعة (Void)</b> — التراجع عن دفعة مسجّلة بالخطأ.</li>
+      <li><b>إعادة إصدار الشهادة</b> — إصدار شهادة بديلة عن شهادة سابقة.</li>
+      <li><b>تقييم بالنيابة عن الطالب</b> — تسجيل تقييم كورس نيابة عن طالب ما عبّى النموذج بنفسه.</li>
+      <li><b>نسخ مسار المهام بين كورسين</b> — نسخ مهام كورس كامل لكورس جديد بدل توليدها من الصفر.</li>
+    </ul>
+  </details>
+
+  <div class="callout note" style="margin-top:22px">
+    <span class="icon">📌</span>
+    <div>عدد مصادر العملاء الجاهزة بالنظام هو 4 (وسائل تواصل، مبيعات، توصية، بوت) — إذا بدك مصادر إضافية، ضيفها من <span class="path">الإعدادات ← مصادر العملاء</span>.</div>
+  </div>
+</section>
+
+</main>
+
+<nav class="toc" id="desktopToc">
+  <span class="toc-title">المحتويات</span>
+  <ol>
+    <li><a href="#start">01 · البداية السريعة</a></li>
+    <li><a href="#roles">02 · الأدوار والصلاحيات</a></li>
+    <li><a href="#dashboard">03 · الرئيسية</a></li>
+    <li><a href="#crm">04 · العملاء المحتملون</a></li>
+    <li><a href="#students">05 · الطلاب والتسجيل</a></li>
+    <li><a href="#courses">06 · الكورسات</a></li>
+    <li><a href="#tasks">07 · لوحة المهام</a></li>
+    <li><a href="#finance">08 · المالية</a></li>
+    <li><a href="#wallets">09 · المحافظ والرواتب</a></li>
+    <li><a href="#chat">10 · الدردشة والإشعارات</a></li>
+    <li><a href="#reports">11 · التقارير</a></li>
+    <li><a href="#notes">12 · ملاحظات ختامية</a></li>
+  </ol>
+</nav>
+
+</div>
+
+<footer>دليل داخلي لفريق Algo Quant — لأي سؤال أو ميزة ناقصة بالواجهة، ارجع لقسم <a href="#notes">الملاحظات الختامية</a> أو تواصل مع فريق التطوير.</footer>
+
+</div>
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var links = Array.prototype.slice.call(document.querySelectorAll('#desktopToc a, #mobileToc a'));
+  function setActive(id){
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+    });
+    var mobileActive = document.querySelector('#mobileToc a.active');
+    if(mobileActive && mobileActive.scrollIntoView){
+      mobileActive.scrollIntoView({block:'nearest', inline:'center'});
+    }
+  }
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ setActive(e.target.id); }
+      });
+    }, {rootMargin:'-15% 0px -70% 0px', threshold:0});
+    sections.forEach(function(s){ io.observe(s); });
+  }
+  document.documentElement.style.scrollBehavior = 'smooth';
+})();
+</script>
+</body>
+</html>

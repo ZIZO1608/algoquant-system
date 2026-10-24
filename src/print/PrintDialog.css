@@ -1,0 +1,263 @@
+/* Print dialog and shared print controls (app side; the document itself is styled by document.css). */
+
+.modal.print-dialog {
+  max-width: min(1280px, calc(100vw - 32px));
+  height: calc(100vh - 48px);
+}
+
+.print-dialog .modal-body {
+  flex: 1;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+}
+
+.print-dialog .modal-head {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.print-layout {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+
+.print-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-5);
+  overflow-y: auto;
+  border-inline-end: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.print-opt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+
+.print-opt-label {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+}
+
+.print-reset {
+  align-self: flex-start;
+}
+
+.print-tip {
+  display: flex;
+  gap: var(--s-2);
+  align-items: flex-start;
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  color: var(--muted);
+  background: var(--surface-2);
+  border-radius: var(--r-md);
+  padding: var(--s-2) var(--s-3);
+}
+
+.print-tip svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--brand-600);
+}
+
+.print-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface-2);
+}
+
+.print-pane-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  min-height: 48px;
+}
+
+.print-pane-bar .badge {
+  gap: 4px;
+}
+
+.print-size {
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+.print-zoom {
+  margin-inline-start: auto;
+}
+
+.print-frame {
+  flex: 1;
+  display: block;
+  width: 100%;
+  min-height: 0;
+  border: 0;
+  background: var(--surface-3);
+}
+
+.print-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  color: var(--muted);
+}
+
+.print-pane .empty-block {
+  margin: auto;
+}
+
+/* ── Controls ─────────────────────────────────────────────────────────────────── */
+
+.print-seg {
+  display: inline-flex;
+  padding: 3px;
+  gap: 3px;
+  border-radius: var(--r-md);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+}
+
+.print-seg button {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  padding: 6px 12px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.print-seg button.active {
+  background: var(--surface);
+  color: var(--brand-600);
+  box-shadow: var(--sh-1);
+}
+
+.print-seg button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.print-seg button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+.print-custom-size {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-2);
+}
+
+.print-mini-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.print-custom-x {
+  padding-bottom: 10px;
+  color: var(--muted);
+}
+
+.print-range {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.print-range label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-2);
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--ink);
+}
+
+.print-range output {
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--brand-600);
+}
+
+.print-range input[type='range'] {
+  width: 100%;
+  accent-color: var(--brand-500);
+}
+
+.print-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.print-stepper output {
+  min-width: 28px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--fs-md);
+}
+
+.print-stepper .btn-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: var(--fs-lg);
+  line-height: 1;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.print-stepper .btn-icon:hover:not(:disabled) {
+  border-color: var(--brand-500);
+  color: var(--brand-600);
+}
+
+@media (max-width: 860px) {
+  .modal.print-dialog {
+    height: calc(100vh - 24px);
+  }
+
+  .print-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(320px, 1fr);
+  }
+
+  .print-options {
+    max-height: 40vh;
+    border-inline-end: 0;
+    border-bottom: 1px solid var(--line);
+  }
+}

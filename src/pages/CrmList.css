@@ -1,0 +1,82 @@
+/* ==========================================================================
+   CRM list: status chips + search share one filter bar
+   ========================================================================== */
+
+.crm-filter-bar {
+  justify-content: space-between;
+}
+
+.crm-status-chips {
+  flex: 1 1 auto;
+  margin-bottom: 0;
+}
+
+.chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.chip.active .chip-count {
+  background: color-mix(in srgb, currentColor 22%, transparent);
+  color: inherit;
+}
+
+.crm-search {
+  position: relative;
+  display: block;
+  flex: 0 1 280px;
+  min-width: 200px;
+}
+
+.crm-search svg {
+  position: absolute;
+  inset-inline-start: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.crm-search .input {
+  padding-inline-start: 36px;
+}
+
+/* Names stay on one line; the table scrolls sideways on narrow screens instead */
+.crm-table .cell-name {
+  white-space: nowrap;
+}
+
+/* Duplicate phone warning inside the add-lead form */
+.crm-duplicate {
+  align-items: flex-start;
+  margin-bottom: var(--s-4);
+}
+
+.crm-duplicate-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+}
+
+.crm-duplicate-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+}
+
+@media (max-width: 680px) {
+  .crm-search {
+    flex-basis: 100%;
+  }
+}

@@ -1,0 +1,44 @@
+import { Router } from 'express';
+import authRoutes from './auth.routes.js';
+import employeesRoutes from './employees.routes.js';
+import settingsRoutes from './settings.routes.js';
+import webhookRoutes from './webhook.routes.js';
+import leadsRoutes from './leads.routes.js';
+import coursesRoutes from './courses.routes.js';
+import tasksRoutes from './tasks.routes.js';
+import studentsRoutes from './students.routes.js';
+import walletsRoutes from './wallets.routes.js';
+import financeRoutes from './finance.routes.js';
+import reportsRoutes from './reports.routes.js';
+import conversationsRoutes from './conversations.routes.js';
+import notificationsRoutes from './notifications.routes.js';
+import dashboardRoutes from './dashboard.routes.js';
+import publicRoutes from './public.routes.js';
+import filesRoutes from './files.routes.js';
+import instructorsRoutes from './instructors.routes.js';
+import documentsRoutes from './documents.routes.js';
+import siteChatsRoutes from './site-chats.routes.js';
+
+const router = Router();
+
+router.use('/auth', authRoutes);
+router.use('/employees', employeesRoutes);
+router.use('/settings', settingsRoutes);
+router.use('/webhooks', webhookRoutes);
+router.use('/leads', leadsRoutes);
+router.use('/courses', coursesRoutes);
+router.use('/tasks', tasksRoutes);
+router.use('/students', studentsRoutes);
+router.use('/wallets', walletsRoutes);
+router.use('/finance', financeRoutes);
+router.use('/reports', reportsRoutes);
+router.use('/conversations', conversationsRoutes);
+router.use('/notifications', notificationsRoutes);
+router.use('/dashboard', dashboardRoutes);
+router.use('/public', publicRoutes);
+router.use('/files', filesRoutes);
+router.use('/instructors', instructorsRoutes);
+router.use('/documents', documentsRoutes);
+router.use('/site-chats', siteChatsRoutes);
+
+export default router;

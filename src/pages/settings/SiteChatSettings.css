@@ -1,0 +1,105 @@
+/* Settings → Website chats. The status tiles reuse .webhook-defs / .webhook-def from Settings.css. */
+
+.sc-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.sc-settings-loading {
+  display: flex;
+  justify-content: center;
+  padding: var(--s-6);
+}
+
+.sc-settings-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.sc-settings-lead {
+  margin-bottom: var(--s-4);
+}
+
+.sc-settings-callout {
+  align-items: flex-start;
+  margin-bottom: var(--s-4);
+}
+
+.sc-settings-callout-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sc-settings-callout-text code {
+  font-size: var(--fs-xs);
+  overflow-wrap: anywhere;
+}
+
+.sc-settings-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-3);
+}
+
+.sc-settings-grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.sc-token {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.sc-token-value {
+  flex: 1;
+  min-width: 220px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: var(--fs-xs);
+  overflow-wrap: anywhere;
+}
+
+.sc-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-3);
+}
+
+.sc-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: var(--s-3) 0;
+  padding-inline-start: 22px;
+  list-style: decimal;
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+
+.sc-steps code,
+.sc-settings-push code {
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-xs);
+  background: var(--surface-2);
+  font-size: var(--fs-xs);
+}
+
+@media (max-width: 640px) {
+  .sc-settings-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

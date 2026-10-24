@@ -1,0 +1,28 @@
+/* ==========================================================================
+   Shared by the CRM list and lead detail
+   ========================================================================== */
+
+/* Follow-up due label: "Today", "In 3 days", "2 days overdue" */
+.crm-due {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  color: var(--ink-soft);
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.crm-due.is-today {
+  background: var(--warning-soft);
+  color: var(--warning-ink);
+}
+
+.crm-due.is-overdue {
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+}

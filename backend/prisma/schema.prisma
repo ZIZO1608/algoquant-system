@@ -1,0 +1,1118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum LeadStatus {
+  new
+  contacted
+  interested
+  paid
+  enrolled
+  archived
+  lost
+}
+
+enum CourseType {
+  course
+  workshop
+}
+
+enum CourseStatus {
+  draft
+  planned
+  enrollment_open
+  active
+  completed
+  archived
+}
+
+enum EnrollmentStatus {
+  enrolled
+  attending
+  completed
+  certified
+  dropped
+}
+
+enum StudentStatus {
+  active
+  frozen
+  graduated
+  withdrawn
+  blocked
+}
+
+enum PaymentStatus {
+  unpaid
+  partially_paid
+  paid_in_full
+}
+
+enum TaskStatus {
+  pending
+  in_progress
+  done
+  late
+}
+
+enum TaskSpecialty {
+  sales
+  media
+  operation
+  logistics
+  accountant
+}
+
+enum OffsetType {
+  days_from_start
+  session_number
+}
+
+enum SessionStatus {
+  scheduled
+  completed
+  cancelled
+}
+
+enum AttendanceStatus {
+  present
+  absent
+  late
+  excused
+}
+
+enum WalletTransactionType {
+  credit_hours
+  credit_profit_share
+  credit_salary
+  debit_withdrawal
+  debit_advance
+  reversal_refund
+  reversal_session_cancel
+  adjustment
+}
+
+enum WithdrawalStatus {
+  requested
+  under_review
+  approved
+  paid
+  rejected
+  cancelled
+}
+
+enum RefundStatus {
+  initiated
+  under_review
+  approved
+  processed
+  rejected
+}
+
+enum AdvanceStatus {
+  requested
+  approved
+  rejected
+  deducted
+}
+
+enum ProfitShareRunStatus {
+  pending
+  approved
+  rejected
+}
+
+enum ConversationType {
+  dm
+  course_channel
+  team
+}
+
+enum ActorType {
+  employee
+  system
+  bot_webhook
+}
+
+enum EvaluationType {
+  post_session
+  post_course
+}
+
+enum EvaluationSubmitVia {
+  magic_link
+  staff_proxy
+}
+
+enum CertificateStatus {
+  pending
+  issued
+  revoked
+}
+
+enum PayrollRunStatus {
+  pending
+  completed
+  failed
+}
+
+enum PrivilegeAction {
+  added
+  removed
+}
+
+// ─── Auth & Privileges ───────────────────────────────────────────────────────
+
+model Employee {
+  id                 String         @id @default(uuid())
+  email              String         @unique
+  passwordHash       String         @map("password_hash")
+  fullName           String         @map("full_name")
+  phone              String?
+  isSalaried         Boolean        @default(true) @map("is_salaried")
+  monthlySalaryMinor BigInt?        @map("monthly_salary_minor")
+  /// Day of month (1–28) when fixed salary is credited to the wallet.
+  salaryDayOfMonth   Int?           @default(1) @map("salary_day_of_month")
+  isActive           Boolean        @default(true) @map("is_active")
+  deletedAt          DateTime?      @map("deleted_at")
+  createdAt          DateTime       @default(now()) @map("created_at")
+  updatedAt          DateTime       @updatedAt @map("updated_at")
+
+  privileges            EmployeePrivilege[]
+  privilegeChanges      PrivilegeChangeLog[] @relation("PrivilegeChangeTarget")
+  privilegeChangesMade  PrivilegeChangeLog[] @relation("PrivilegeChangeBy")
+  refreshTokens         RefreshToken[]
+  assignedLeads         Lead[]               @relation("LeadAssignee")
+  assignedTasks         Task[]               @relation("TaskAssignee")
+  absences              EmployeeAbsence[]
+  absencesMarked        EmployeeAbsence[]    @relation("AbsenceMarkedBy")
+  rating                EmployeeRating?
+  ratingEvents          EmployeeRatingEvent[]
+  availability          InstructorAvailability[]
+  wallet                Wallet?
+  withdrawalRequests    WalletWithdrawalRequest[]
+  salaryAdvances        SalaryAdvance[]
+  expensesCreated       Expense[]
+  ownerWithdrawals      OwnerWithdrawal[]
+  refundsInitiated      Refund[]
+  paymentsReceived      StudentPayment[]
+  paymentsVoided        StudentPayment[]     @relation("PaymentVoidedBy")
+  attendanceMarked      SessionAttendance[]
+  certificatesIssued    Certificate[]
+  evaluationsSubmitted  Evaluation[]         @relation("EvaluationStaff")
+  conversationMembers   ConversationMember[]
+  messagesSent          Message[]
+  notifications         Notification[]
+  coursesAsInstructor   Course[]             @relation("PrimaryInstructor")
+  courseInstructorLinks CourseInstructor[]
+  auditLogs             AuditLog[]           @relation("AuditActor")
+  statusTransitions     EntityStatusTransition[] @relation("TransitionActor")
+  leadActivities        LeadActivity[]
+  taskAttachments       TaskAttachment[]
+  fileUploads           FileObject[]
+  courseTaskPathLinks   CourseTaskPathLink[]
+  profitShareRunsDecided ProfitShareRun[]    @relation("ProfitShareDecidedBy")
+  stakeholderRules      StakeholderRule[]
+
+  @@map("employees")
+}
+
+model Privilege {
+  id      String @id @default(uuid())
+  code    String @unique
+  labelAr String @map("label_ar")
+  labelEn String @map("label_en")
+
+  employees       EmployeePrivilege[]
+  privilegeChanges PrivilegeChangeLog[]
+
+  @@map("privileges")
+}
+
+model EmployeePrivilege {
+  employeeId   String   @map("employee_id")
+  privilegeId  String   @map("privilege_id")
+  assignedById String?  @map("assigned_by")
+  assignedAt   DateTime @default(now()) @map("assigned_at")
+
+  employee  Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  privilege Privilege @relation(fields: [privilegeId], references: [id], onDelete: Cascade)
+
+  @@id([employeeId, privilegeId])
+  @@map("employee_privileges")
+}
+
+model PrivilegeChangeLog {
+  id          String          @id @default(uuid())
+  employeeId  String          @map("employee_id")
+  privilegeId String          @map("privilege_id")
+  action      PrivilegeAction
+  changedById String          @map("changed_by")
+  createdAt   DateTime        @default(now()) @map("created_at")
+
+  employee  Employee  @relation("PrivilegeChangeTarget", fields: [employeeId], references: [id])
+  privilege Privilege @relation(fields: [privilegeId], references: [id])
+  changedBy Employee  @relation("PrivilegeChangeBy", fields: [changedById], references: [id])
+
+  @@map("privilege_change_logs")
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid())
+  employeeId String    @map("employee_id")
+  tokenHash  String    @map("token_hash")
+  expiresAt  DateTime  @map("expires_at")
+  revokedAt  DateTime? @map("revoked_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+// ─── CRM / Leads ─────────────────────────────────────────────────────────────
+
+model LeadSource {
+  id       String  @id @default(uuid())
+  code     String  @unique
+  labelAr  String  @map("label_ar")
+  isSystem Boolean @default(false) @map("is_system")
+  isActive Boolean @default(true) @map("is_active")
+
+  leads Lead[]
+
+  @@map("lead_sources")
+}
+
+model Lead {
+  id                   String     @id @default(uuid())
+  fullName             String     @map("full_name")
+  phone                String
+  sourceId             String     @map("source_id")
+  requestedTrackId     String?    @map("requested_track_id")
+  requestedCourseText  String?    @map("requested_course_text")
+  status               LeadStatus @default(new)
+  assignedEmployeeId   String?    @map("assigned_employee_id")
+  notes                String?
+  extraData            Json       @default("{}") @map("extra_data")
+  externalLeadId       String?    @map("external_lead_id")
+  sourceSystem         String?    @map("source_system")
+  stuckFlaggedAt       DateTime?  @map("stuck_flagged_at")
+  nextFollowUpAt       DateTime?  @map("next_follow_up_at")
+  followUpFlaggedAt    DateTime?  @map("follow_up_flagged_at")
+  searchText           String?    @map("search_text")
+  deletedAt            DateTime?  @map("deleted_at")
+  createdAt            DateTime   @default(now()) @map("created_at")
+  updatedAt            DateTime   @updatedAt @map("updated_at")
+
+  source           LeadSource  @relation(fields: [sourceId], references: [id])
+  requestedTrack   CourseTrack? @relation(fields: [requestedTrackId], references: [id])
+  assignedEmployee Employee?   @relation("LeadAssignee", fields: [assignedEmployeeId], references: [id])
+  activities       LeadActivity[]
+  enrollments      Enrollment[]
+  webhookLogs      WebhookInboundLog[]
+  siteConversations SiteConversation[]
+
+  @@unique([sourceSystem, externalLeadId])
+  @@index([status])
+  @@index([assignedEmployeeId])
+  @@index([nextFollowUpAt])
+  @@index([extraData], type: Gin)
+  @@map("leads")
+}
+
+model LeadActivity {
+  id               String    @id @default(uuid())
+  leadId           String    @map("lead_id")
+  type             String
+  body             String?
+  actorType        ActorType @map("actor_type")
+  actorEmployeeId  String?   @map("actor_employee_id")
+  createdAt        DateTime  @default(now()) @map("created_at")
+
+  lead          Lead      @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  actorEmployee Employee? @relation(fields: [actorEmployeeId], references: [id])
+
+  @@map("lead_activities")
+}
+
+model WebhookInboundLog {
+  id              String   @id @default(uuid())
+  receivedAt      DateTime @default(now()) @map("received_at")
+  success         Boolean
+  failureReason   String?  @map("failure_reason")
+  externalLeadId  String?  @map("external_lead_id")
+  leadId          String?  @map("lead_id")
+  ip              String?
+  sanitizedPayload Json?   @map("sanitized_payload")
+
+  lead Lead? @relation(fields: [leadId], references: [id])
+
+  @@map("webhook_inbound_logs")
+}
+
+model SettingsWebhook {
+  id              String   @id @default("singleton")
+  secretTokenHash String   @map("secret_token_hash")
+  secretHint      String   @map("secret_hint")
+  rotatedAt       DateTime @default(now()) @map("rotated_at")
+  publicPath      String   @default("/api/v1/webhooks/leads/inbound") @map("public_path")
+
+  @@map("settings_webhook")
+}
+
+// ─── Website bot conversations (algoquant.vip) ───────────────────────────────
+
+/// One visitor conversation with a bot on the public website, mirrored from the site's
+/// `site_conversations` table by the sync job (pull) or the site's push webhook.
+model SiteConversation {
+  id               String    @id @default(uuid())
+  /// `site_conversations.id` on the website — the idempotency key for pull and push.
+  externalId       String    @unique @map("external_id")
+  sessionId        String    @map("session_id")
+  /// workshop | proposal | elevator
+  channel          String
+  lang             String    @default("ar")
+  page             String?
+  /// active | completed (the bot finished its questions)
+  siteStatus       String    @default("active") @map("site_status")
+  /// [{ role: 'user' | 'assistant', content, at }]
+  messages         Json      @default("[]")
+  messageCount     Int       @default(0) @map("message_count")
+  visitorName      String?   @map("visitor_name")
+  visitorContact   String?   @map("visitor_contact")
+  contactMethod    String?   @map("contact_method")
+  visitorNote      String?   @map("visitor_note")
+  /// The elevator's six qualification answers.
+  answers          Json?
+  recommendation   Json?
+  /// { table, id, fields } — the lead row the website saved for this conversation.
+  leadSnapshot     Json?     @map("lead_snapshot")
+  leadId           String?   @map("lead_id")
+  startedAt        DateTime  @map("started_at")
+  lastActivityAt   DateTime  @map("last_activity_at")
+  remoteUpdatedAt  DateTime  @map("remote_updated_at")
+  searchText       String?   @map("search_text")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  lead Lead? @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([lastActivityAt])
+  @@index([leadId])
+  @@map("site_conversations")
+}
+
+/// Connection to the website's conversation feed. The token is sent to the site, so it is
+/// stored as-is (unlike the inbound lead webhook's hashed secret) and only admins can read it.
+model SettingsSiteChat {
+  id            String    @id @default("singleton")
+  enabled       Boolean   @default(false)
+  siteUrl       String    @default("https://algoquant.vip") @map("site_url")
+  token         String
+  /// Opaque cursor returned by the site; null = import everything on the next sync.
+  cursor        String?
+  lastSyncAt    DateTime? @map("last_sync_at")
+  lastSuccessAt DateTime? @map("last_success_at")
+  lastError     String?   @map("last_error")
+  lastErrorAt   DateTime? @map("last_error_at")
+  lastPushAt    DateTime? @map("last_push_at")
+  totalReceived Int       @default(0) @map("total_received")
+  tokenRotatedAt DateTime @default(now()) @map("token_rotated_at")
+
+  @@map("settings_site_chat")
+}
+
+// ─── Courses & Tasks ─────────────────────────────────────────────────────────
+
+model CourseTrack {
+  id       String  @id @default(uuid())
+  nameAr   String  @map("name_ar")
+  nameEn   String? @map("name_en")
+  isActive Boolean @default(true) @map("is_active")
+
+  courses Course[]
+  leads   Lead[]
+
+  @@map("course_tracks")
+}
+
+model Course {
+  id                   String       @id @default(uuid())
+  name                 String
+  trackId              String       @map("track_id")
+  courseType           CourseType   @default(course) @map("course_type")
+  startDate            DateTime     @map("start_date") @db.Date
+  sessionCount         Int          @map("session_count")
+  totalHours           Float        @default(0) @map("total_hours")
+  priceMinor           BigInt       @map("price_minor")
+  capacity             Int
+  status               CourseStatus @default(draft)
+  primaryInstructorId  String?      @map("primary_instructor_id")
+  hallNotes            String?      @map("hall_notes")
+  deletedAt            DateTime?    @map("deleted_at")
+  createdAt            DateTime     @default(now()) @map("created_at")
+  updatedAt            DateTime     @updatedAt @map("updated_at")
+
+  track              CourseTrack          @relation(fields: [trackId], references: [id])
+  primaryInstructor  Employee?            @relation("PrimaryInstructor", fields: [primaryInstructorId], references: [id])
+  sessions           CourseSession[]
+  instructors        CourseInstructor[]
+  tasks              Task[]
+  taskPathLinks      CourseTaskPathLink[]
+  enrollments        Enrollment[]
+  expenses           Expense[]
+  evaluationCampaigns EvaluationCampaign[]
+  conversations      Conversation[]
+
+  @@index([courseType])
+  @@map("courses")
+}
+
+model CourseInstructor {
+  courseId         String  @map("course_id")
+  employeeId       String  @map("employee_id")
+  payPercent       Float?  @map("pay_percent")
+  hourlyRateMinor  BigInt? @map("hourly_rate_minor")
+
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@id([courseId, employeeId])
+  @@map("course_instructors")
+}
+
+model CourseSession {
+  id              String        @id @default(uuid())
+  courseId        String        @map("course_id")
+  sessionNumber   Int           @map("session_number")
+  scheduledAt     DateTime      @map("scheduled_at")
+  durationMinutes Int           @default(90) @map("duration_minutes")
+  status          SessionStatus @default(scheduled)
+  hall            String?
+
+  course      Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  attendance  SessionAttendance[]
+  evaluations EvaluationCampaign[]
+
+  @@unique([courseId, sessionNumber])
+  @@map("course_sessions")
+}
+
+model TaskPathTemplate {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  isActive    Boolean @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  items TaskPathTemplateItem[]
+  links CourseTaskPathLink[]
+
+  @@map("task_path_templates")
+}
+
+model TaskPathTemplateItem {
+  id          String        @id @default(uuid())
+  templateId  String        @map("template_id")
+  title       String
+  phaseKey    String        @map("phase_key")
+  specialty   TaskSpecialty
+  offsetType  OffsetType    @map("offset_type")
+  offsetValue Int           @map("offset_value")
+  sortOrder   Int           @map("sort_order")
+  notes       String?
+
+  template TaskPathTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  tasks    Task[]
+
+  @@map("task_path_template_items")
+}
+
+model CourseTaskPathLink {
+  courseId    String   @map("course_id")
+  templateId  String   @map("template_id")
+  attachedAt  DateTime @default(now()) @map("attached_at")
+  attachedById String  @map("attached_by")
+
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  template  TaskPathTemplate @relation(fields: [templateId], references: [id])
+  attachedBy Employee        @relation(fields: [attachedById], references: [id])
+
+  @@id([courseId, templateId])
+  @@map("course_task_path_links")
+}
+
+model Task {
+  id                 String        @id @default(uuid())
+  courseId           String        @map("course_id")
+  templateItemId     String?       @map("template_item_id")
+  title              String
+  phaseKey           String        @map("phase_key")
+  specialty          TaskSpecialty
+  assignedEmployeeId String?       @map("assigned_employee_id")
+  dueAt              DateTime?     @map("due_at")
+  status             TaskStatus    @default(pending)
+  completedAt        DateTime?     @map("completed_at")
+  completedById      String?       @map("completed_by")
+  notes              String?
+  isLate             Boolean       @default(false) @map("is_late")
+  deletedAt          DateTime?     @map("deleted_at")
+  createdAt          DateTime      @default(now()) @map("created_at")
+  updatedAt          DateTime      @updatedAt @map("updated_at")
+
+  course           Course                @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  templateItem     TaskPathTemplateItem? @relation(fields: [templateItemId], references: [id])
+  assignedEmployee Employee?             @relation("TaskAssignee", fields: [assignedEmployeeId], references: [id])
+  attachments      TaskAttachment[]
+  ratingEvents     EmployeeRatingEvent[]
+
+  @@index([courseId, specialty, status])
+  @@map("tasks")
+}
+
+model TaskAttachment {
+  id          String @id @default(uuid())
+  taskId      String @map("task_id")
+  storageKey  String @map("storage_key")
+  mime        String
+  uploadedById String @map("uploaded_by")
+
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  uploadedBy Employee @relation(fields: [uploadedById], references: [id])
+
+  @@map("task_attachments")
+}
+
+// ─── Students ────────────────────────────────────────────────────────────────
+
+model Student {
+  id        String    @id @default(uuid())
+  fullName  String    @map("full_name")
+  phone     String?
+  email     String?
+  notes     String?
+  /// Overall standing with the academy; each course keeps its own Enrollment.enrollmentStatus.
+  status          StudentStatus @default(active)
+  statusReason    String?       @map("status_reason")
+  statusChangedAt DateTime?     @map("status_changed_at")
+  searchText String?  @map("search_text")
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  enrollments       Enrollment[]
+  attendance        SessionAttendance[]
+  evaluationTokens  EvaluationToken[]
+  evaluations       Evaluation[]
+
+  @@index([status])
+  @@map("students")
+}
+
+model Enrollment {
+  id               String           @id @default(uuid())
+  studentId        String           @map("student_id")
+  courseId         String           @map("course_id")
+  leadId           String?          @map("lead_id")
+  enrollmentStatus EnrollmentStatus @default(enrolled) @map("enrollment_status")
+  paymentStatus    PaymentStatus    @default(unpaid) @map("payment_status")
+  totalPriceMinor  BigInt           @map("total_price_minor")
+  amountPaidMinor  BigInt           @default(0) @map("amount_paid_minor")
+  enrolledAt       DateTime         @default(now()) @map("enrolled_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  student     Student          @relation(fields: [studentId], references: [id])
+  course      Course           @relation(fields: [courseId], references: [id])
+  lead        Lead?            @relation(fields: [leadId], references: [id])
+  payments    StudentPayment[]
+  certificates Certificate[]
+  refunds     Refund[]
+  evaluations Evaluation[]
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+model StudentPayment {
+  id           String    @id @default(uuid())
+  enrollmentId String    @map("enrollment_id")
+  amountMinor  BigInt    @map("amount_minor")
+  paidAt       DateTime  @default(now()) @map("paid_at")
+  receivedById String    @map("received_by")
+  method       String?
+  note         String?
+  voidedAt     DateTime? @map("voided_at")
+  voidedById   String?   @map("voided_by")
+  voidReason   String?   @map("void_reason")
+  /// Printed receipt number (a sequence); the prefix comes from the print settings.
+  receiptNo    Int       @default(autoincrement()) @map("receipt_no")
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  receivedBy Employee   @relation(fields: [receivedById], references: [id])
+  voidedBy   Employee?  @relation("PaymentVoidedBy", fields: [voidedById], references: [id])
+
+  @@map("student_payments")
+}
+
+model SessionAttendance {
+  id         String           @id @default(uuid())
+  sessionId  String           @map("session_id")
+  studentId  String           @map("student_id")
+  status     AttendanceStatus
+  markedById String           @map("marked_by")
+  markedAt   DateTime         @default(now()) @map("marked_at")
+
+  session  CourseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student  Student       @relation(fields: [studentId], references: [id])
+  markedBy Employee      @relation(fields: [markedById], references: [id])
+
+  @@unique([sessionId, studentId])
+  @@map("session_attendance")
+}
+
+model Certificate {
+  id           String            @id @default(uuid())
+  enrollmentId String            @map("enrollment_id")
+  issuedAt     DateTime?         @map("issued_at")
+  storageKey   String?           @map("storage_key")
+  status       CertificateStatus @default(pending)
+  issuedById   String?           @map("issued_by")
+
+  enrollment Enrollment @relation(fields: [enrollmentId], references: [id])
+  issuedBy   Employee?  @relation(fields: [issuedById], references: [id])
+
+  @@map("certificates")
+}
+
+model EvaluationCampaign {
+  id        String         @id @default(uuid())
+  courseId  String         @map("course_id")
+  sessionId String?        @map("session_id")
+  type      EvaluationType
+  opensAt   DateTime       @map("opens_at")
+  closesAt  DateTime?      @map("closes_at")
+
+  course  Course          @relation(fields: [courseId], references: [id])
+  session CourseSession?  @relation(fields: [sessionId], references: [id])
+  tokens  EvaluationToken[]
+  evaluations Evaluation[]
+
+  @@map("evaluation_campaigns")
+}
+
+model EvaluationToken {
+  id         String    @id @default(uuid())
+  campaignId String    @map("campaign_id")
+  studentId  String    @map("student_id")
+  token      String    @unique
+  expiresAt  DateTime  @map("expires_at")
+  usedAt     DateTime? @map("used_at")
+
+  campaign EvaluationCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  student  Student            @relation(fields: [studentId], references: [id])
+
+  @@map("evaluation_tokens")
+}
+
+model Evaluation {
+  id                 String              @id @default(uuid())
+  campaignId         String              @map("campaign_id")
+  studentId          String              @map("student_id")
+  enrollmentId       String?             @map("enrollment_id")
+  courseScore        Int                 @map("course_score")
+  teacherScore       Int                 @map("teacher_score")
+  hallScore          Int                 @map("hall_score")
+  comment            String?
+  recommendedCourses String?             @map("recommended_courses")
+  benefitLevel       Int                 @map("benefit_level")
+  benefitReason      String?             @map("benefit_reason")
+  submittedAt        DateTime            @default(now()) @map("submitted_at")
+  submittedVia       EvaluationSubmitVia @map("submitted_via")
+  submittedById      String?             @map("submitted_by")
+
+  campaign    EvaluationCampaign @relation(fields: [campaignId], references: [id])
+  student     Student            @relation(fields: [studentId], references: [id])
+  enrollment  Enrollment?        @relation(fields: [enrollmentId], references: [id])
+  submittedBy Employee?          @relation("EvaluationStaff", fields: [submittedById], references: [id])
+
+  @@unique([campaignId, studentId])
+  @@map("evaluations")
+}
+
+// ─── Employees: absence, rating ──────────────────────────────────────────────
+
+model EmployeeAbsence {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  date       DateTime @db.Date
+  reason     String?
+  markedById String   @map("marked_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  markedBy Employee @relation("AbsenceMarkedBy", fields: [markedById], references: [id])
+
+  @@unique([employeeId, date])
+  @@map("employee_absences")
+}
+
+model EmployeeRating {
+  id             String   @id @default(uuid())
+  employeeId     String   @unique @map("employee_id")
+  score          Int      @default(0)
+  lastComputedAt DateTime @default(now()) @map("last_computed_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("employee_ratings")
+}
+
+model EmployeeRatingEvent {
+  id         String @id @default(uuid())
+  employeeId String @map("employee_id")
+  taskId     String @map("task_id")
+  delta      Int
+  reason     String
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+  task     Task     @relation(fields: [taskId], references: [id])
+
+  @@map("employee_rating_events")
+}
+
+model InstructorAvailability {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  startsAt   DateTime @map("starts_at")
+  endsAt     DateTime @map("ends_at")
+  note       String?
+  status     String   @default("pending")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("instructor_availability")
+}
+
+// ─── Wallets & Finance ───────────────────────────────────────────────────────
+
+model Wallet {
+  id           String @id @default(uuid())
+  ownerId      String @unique @map("owner_id")
+  balanceMinor BigInt @default(0) @map("balance_minor")
+  currencyCode String @default("SYP") @map("currency_code")
+
+  owner        Employee                  @relation(fields: [ownerId], references: [id])
+  transactions WalletTransaction[]
+  withdrawals  WalletWithdrawalRequest[]
+
+  @@map("wallets")
+}
+
+model WalletTransaction {
+  id               String                @id @default(uuid())
+  walletId         String                @map("wallet_id")
+  type             WalletTransactionType
+  amountMinor      BigInt                @map("amount_minor")
+  balanceAfterMinor BigInt               @map("balance_after_minor")
+  reason           String?
+  referenceType    String?               @map("reference_type")
+  referenceId      String?               @map("reference_id")
+  approvedById     String?               @map("approved_by")
+  createdAt        DateTime              @default(now()) @map("created_at")
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
+
+  @@map("wallet_transactions")
+}
+
+model WalletWithdrawalRequest {
+  id           String           @id @default(uuid())
+  walletId     String           @map("wallet_id")
+  amountMinor  BigInt           @map("amount_minor")
+  status       WithdrawalStatus @default(requested)
+  requestedById String          @map("requested_by")
+  reviewedById String?          @map("reviewed_by")
+  reason       String?
+  paidAt       DateTime?        @map("paid_at")
+  createdAt    DateTime         @default(now()) @map("created_at")
+  updatedAt    DateTime         @updatedAt @map("updated_at")
+  voucherNo    Int              @default(autoincrement()) @map("voucher_no")
+
+  wallet      Wallet   @relation(fields: [walletId], references: [id])
+  requestedBy Employee @relation(fields: [requestedById], references: [id])
+
+  @@map("wallet_withdrawal_requests")
+}
+
+model SalaryAdvance {
+  id                  String        @id @default(uuid())
+  employeeId          String        @map("employee_id")
+  amountMinor         BigInt        @map("amount_minor")
+  status              AdvanceStatus @default(requested)
+  requestedAt         DateTime      @default(now()) @map("requested_at")
+  deductedPayrollMonth String?      @map("deducted_payroll_month")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("salary_advances")
+}
+
+model ExpenseCategory {
+  id       String  @id @default(uuid())
+  code     String  @unique
+  labelAr  String  @map("label_ar")
+  isSystem Boolean @default(false) @map("is_system")
+  isActive Boolean @default(true) @map("is_active")
+
+  expenses Expense[]
+
+  @@map("expense_categories")
+}
+
+model Expense {
+  id          String    @id @default(uuid())
+  categoryId  String    @map("category_id")
+  amountMinor BigInt    @map("amount_minor")
+  reason      String
+  courseId    String?   @map("course_id")
+  spentAt     DateTime  @map("spent_at")
+  createdById String    @map("created_by")
+  deletedAt   DateTime? @map("deleted_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  voucherNo   Int       @default(autoincrement()) @map("voucher_no")
+
+  category  ExpenseCategory @relation(fields: [categoryId], references: [id])
+  course    Course?         @relation(fields: [courseId], references: [id])
+  createdBy Employee        @relation(fields: [createdById], references: [id])
+
+  @@map("expenses")
+}
+
+model OwnerWithdrawal {
+  id          String   @id @default(uuid())
+  amountMinor BigInt   @map("amount_minor")
+  reason      String
+  spentAt     DateTime @map("spent_at")
+  createdById String   @map("created_by")
+  createdAt   DateTime @default(now()) @map("created_at")
+  voucherNo   Int      @default(autoincrement()) @map("voucher_no")
+
+  createdBy Employee @relation(fields: [createdById], references: [id])
+
+  @@map("owner_withdrawals")
+}
+
+model Refund {
+  id           String       @id @default(uuid())
+  enrollmentId String       @map("enrollment_id")
+  sessionId    String?      @map("session_id")
+  amountMinor  BigInt       @map("amount_minor")
+  status       RefundStatus @default(initiated)
+  reason       String
+  initiatedById String      @map("initiated_by")
+  processedAt  DateTime?    @map("processed_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  voucherNo    Int          @default(autoincrement()) @map("voucher_no")
+
+  enrollment  Enrollment @relation(fields: [enrollmentId], references: [id])
+  initiatedBy Employee   @relation(fields: [initiatedById], references: [id])
+
+  @@map("refunds")
+}
+
+model PayrollRun {
+  id            String           @id @default(uuid())
+  periodYyyyMm  String           @map("period_yyyy_mm")
+  status        PayrollRunStatus @default(pending)
+  ranAt         DateTime?        @map("ran_at")
+  createdAt     DateTime         @default(now()) @map("created_at")
+
+  @@unique([periodYyyyMm])
+  @@map("payroll_runs")
+}
+
+model ProfitShareRun {
+  id             String               @id @default(uuid())
+  periodYyyyMm   String               @unique @map("period_yyyy_mm")
+  status         ProfitShareRunStatus @default(pending)
+  netProfitMinor BigInt               @map("net_profit_minor")
+  laborCostMinor BigInt               @map("labor_cost_minor")
+  linesJson      Json                 @map("lines_json")
+  computedAt     DateTime             @default(now()) @map("computed_at")
+  decidedAt      DateTime?            @map("decided_at")
+  decidedById    String?              @map("decided_by")
+
+  decidedBy Employee? @relation("ProfitShareDecidedBy", fields: [decidedById], references: [id])
+
+  @@map("profit_share_runs")
+}
+
+model SettingsFinance {
+  id                       String @id @default("singleton")
+  currencyCode             String @default("SYP") @map("currency_code")
+  currencyLabel            String @default("ل.س") @map("currency_label")
+  defaultTeacherPayPercent Float  @default(50) @map("default_teacher_pay_percent")
+
+  @@map("settings_finance")
+}
+
+model StakeholderRule {
+  id         String   @id @default(uuid())
+  employeeId String   @unique @map("employee_id")
+  percent    Float
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id])
+
+  @@map("stakeholder_rules")
+}
+
+// ─── Messaging & Notifications ─────────────────────────────────────────────────
+
+model Conversation {
+  id        String           @id @default(uuid())
+  type      ConversationType
+  courseId  String?          @map("course_id")
+  title     String?
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  course   Course?              @relation(fields: [courseId], references: [id])
+  members  ConversationMember[]
+  messages Message[]
+
+  @@map("conversations")
+}
+
+model ConversationMember {
+  conversationId String    @map("conversation_id")
+  employeeId     String    @map("employee_id")
+  lastReadAt     DateTime? @map("last_read_at")
+  joinedAt       DateTime  @default(now()) @map("joined_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  employee     Employee     @relation(fields: [employeeId], references: [id])
+
+  @@id([conversationId, employeeId])
+  @@map("conversation_members")
+}
+
+model Message {
+  id             String    @id @default(uuid())
+  conversationId String    @map("conversation_id")
+  senderId       String    @map("sender_id")
+  body           String
+  createdAt      DateTime  @default(now()) @map("created_at")
+  deletedAt      DateTime? @map("deleted_at")
+
+  conversation Conversation       @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       Employee           @relation(fields: [senderId], references: [id])
+  attachments  MessageAttachment[]
+
+  @@map("messages")
+}
+
+model MessageAttachment {
+  id           String  @id @default(uuid())
+  messageId    String  @map("message_id")
+  storageKey   String  @map("storage_key")
+  mime         String
+  fileObjectId String? @map("file_object_id")
+
+  message    Message     @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  fileObject FileObject? @relation(fields: [fileObjectId], references: [id], onDelete: SetNull)
+
+  @@map("message_attachments")
+}
+
+model Notification {
+  id         String    @id @default(uuid())
+  employeeId String    @map("employee_id")
+  type       String
+  title      String
+  body       String?
+  payload    Json      @default("{}")
+  readAt     DateTime? @map("read_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@index([employeeId, readAt])
+  @@map("notifications")
+}
+
+// ─── Audit & Settings ────────────────────────────────────────────────────────
+
+model EntityStatusTransition {
+  id              String    @id @default(uuid())
+  entityType      String    @map("entity_type")
+  entityId        String    @map("entity_id")
+  fromStatus      String    @map("from_status")
+  toStatus        String    @map("to_status")
+  triggeredByType ActorType @map("triggered_by_type")
+  triggeredById   String?   @map("triggered_by_id")
+  reason          String?
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  triggeredBy Employee? @relation("TransitionActor", fields: [triggeredById], references: [id])
+
+  @@index([entityType, entityId])
+  @@map("entity_status_transitions")
+}
+
+model AuditLog {
+  id         String    @id @default(uuid())
+  actorType  ActorType @map("actor_type")
+  actorId    String?   @map("actor_id")
+  action     String
+  entityType String    @map("entity_type")
+  entityId   String?   @map("entity_id")
+  oldValue   Json?     @map("old_value")
+  newValue   Json?     @map("new_value")
+  ip         String?
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  actor Employee? @relation("AuditActor", fields: [actorId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model AppSetting {
+  key       String @id
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_settings")
+}
+
+model FileObject {
+  id           String   @id @default(uuid())
+  storageKey   String   @map("storage_key")
+  bucket       String
+  mime         String
+  size         Int
+  uploadedById String   @map("uploaded_by")
+  purpose      String
+  originalName String?  @map("original_name")
+  entityType   String?  @map("entity_type")
+  entityId     String?  @map("entity_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  uploadedBy Employee @relation(fields: [uploadedById], references: [id])
+  messageAttachments MessageAttachment[]
+
+  @@index([entityType, entityId])
+  @@map("file_objects")
+}

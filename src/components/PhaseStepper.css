@@ -1,0 +1,101 @@
+.phase-stepper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: var(--s-6);
+}
+
+.phase-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  min-width: 0;
+}
+
+.phase-step.active {
+  border-color: var(--brand-500);
+  box-shadow: 0 0 0 3px rgba(38, 171, 251, 0.14);
+}
+
+.phase-step-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.phase-step.past .phase-step-marker {
+  background: var(--success-soft);
+  color: var(--success-ink);
+}
+
+.phase-step.active .phase-step-marker {
+  background: var(--brand-500);
+  color: #06202f;
+}
+
+.phase-step-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.phase-step-label {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.phase-step-count {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.phase-step-bar {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.phase-step-bar span {
+  display: block;
+  height: 100%;
+  background: var(--brand-500);
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.phase-step.past .phase-step-bar span {
+  background: var(--success);
+}
+
+@media (max-width: 1100px) {
+  .phase-stepper {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .phase-stepper {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,320 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  background: var(--ground);
+}
+
+/* ---------- Brand panel (inline-start = right in RTL) ---------- */
+
+.login-brand-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px 52px 32px;
+  background: var(--brand-900);
+  color: #fff;
+  overflow: hidden;
+}
+
+.login-brand-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 15%, rgba(38, 171, 251, 0.45), transparent 42%),
+    radial-gradient(circle at 90% 90%, rgba(38, 171, 251, 0.22), transparent 45%),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.04), transparent 60%);
+  pointer-events: none;
+}
+
+.login-brand-inner {
+  position: relative;
+  max-width: 440px;
+}
+
+.login-brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 44px;
+}
+
+.login-brand-name {
+  font-family: var(--font-head);
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  direction: ltr;
+  text-align: start;
+}
+
+.login-brand-tagline {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 4px;
+}
+
+.login-brand-title {
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 800;
+  line-height: 1.35;
+  margin-bottom: 32px;
+  color: #fff;
+}
+
+.login-features {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-features li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.login-feature-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
+  background: rgba(38, 171, 251, 0.18);
+  color: var(--brand-500);
+  flex-shrink: 0;
+}
+
+.login-features li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.login-features strong {
+  font-family: var(--font-head);
+  font-size: var(--fs-base);
+  font-weight: 700;
+}
+
+.login-features span span {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.6;
+}
+
+.login-brand-foot {
+  position: relative;
+  font-size: var(--fs-xs);
+  color: rgba(255, 255, 255, 0.5);
+  direction: ltr;
+  text-align: start;
+}
+
+/* ---------- Form panel ---------- */
+
+.login-form-panel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.login-lang {
+  position: absolute;
+  top: 20px;
+  inset-inline-end: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-mobile-brand {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.login-mobile-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 800;
+  direction: ltr;
+}
+
+.login-title {
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.login-subtitle {
+  color: var(--muted);
+  font-size: var(--fs-md);
+  margin-bottom: 32px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-field label {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.login-input-wrap {
+  position: relative;
+}
+
+.login-input-icon {
+  position: absolute;
+  inset-inline-start: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  display: inline-flex;
+  pointer-events: none;
+}
+
+/* The inputs are dir="ltr" (emails and passwords), so their inline start is the LEFT side,
+   while the icons sit in the RTL wrapper: envelope and lock on the right, the eye on the left. */
+.login-input {
+  width: 100%;
+  height: 48px;
+  padding-inline: 14px 44px;
+  font-size: var(--fs-base);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  color: var(--ink);
+  text-align: start;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.login-input::placeholder {
+  color: var(--muted-soft);
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  box-shadow: var(--focus-ring);
+}
+
+.login-input-password {
+  padding-inline-start: 48px;
+}
+
+/* In an LTR document the field icons swap sides: envelope and lock on the left, the eye on the right. */
+:root[dir='ltr'] .login-input {
+  padding-inline: 44px 14px;
+}
+
+:root[dir='ltr'] .login-input-password {
+  padding-inline-end: 48px;
+}
+
+.login-input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.login-input[aria-invalid='true']:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--danger) 22%, transparent);
+}
+
+.login-field-error {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.login-password-toggle {
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: var(--r-sm);
+  background: transparent;
+  color: var(--muted);
+  transition: color 0.15s, background 0.15s;
+}
+
+.login-password-toggle:hover {
+  color: var(--ink);
+  background: var(--surface-2);
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+  font-size: var(--fs-sm);
+  line-height: 1.5;
+}
+
+.login-error svg {
+  flex-shrink: 0;
+}
+
+.spinner-on-primary {
+  border-color: rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+}
+
+.login-help {
+  margin-top: 24px;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .login-page {
+    grid-template-columns: 1fr;
+  }
+
+  .login-brand-panel {
+    display: none;
+  }
+
+  .login-mobile-brand {
+    display: flex;
+  }
+
+  .login-form-panel {
+    padding: 40px 20px;
+    align-items: flex-start;
+  }
+
+  .login-title {
+    font-size: var(--fs-2xl);
+  }
+}

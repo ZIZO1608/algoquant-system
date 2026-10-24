@@ -1,0 +1,20 @@
+/** English for src/pages/Login.jsx. */
+export default {
+  'من أول رسالة حتى التسجيل والتحصيل في خطوة واحدة.': 'From the first message to enrollment and payment, in one flow.',
+  'الدورات والمهام': 'Courses & tasks',
+  'دورة حياة تلقائية لكل دورة مع مهام موزّعة على الفريق.': 'An automatic lifecycle for every course, with tasks shared across the team.',
+  'المالية والمحافظ': 'Finance & wallets',
+  'إيرادات، مصروفات، رواتب ومحافظ الموظفين في مكان واحد.': 'Revenue, expenses, salaries and employee wallets in one place.',
+  'أدخل البريد الإلكتروني.': 'Enter your email address.',
+  'تحقق من صيغة البريد الإلكتروني، مثل name@algoquant.local': 'Check the email format, for example name@algoquant.local',
+  'أدخل كلمة المرور.': 'Enter your password.',
+  'تعذّر تسجيل الدخول. تأكد من البريد وكلمة المرور.': "Couldn't sign in. Check your email and password.",
+  'كل الأكاديمية في شاشة واحدة.': 'Your whole academy on one screen.',
+  'تسجيل الدخول': 'Sign in',
+  'ادخل ببيانات حسابك للوصول إلى لوحة الإدارة.': 'Sign in with your account to open the admin panel.',
+  'كلمة المرور': 'Password',
+  'إخفاء كلمة المرور': 'Hide password',
+  'إظهار كلمة المرور': 'Show password',
+  'جاري الدخول…': 'Signing in…',
+  'نسيت كلمة المرور؟ تواصل مع مدير النظام لإعادة تعيينها.': 'Forgot your password? Ask your system administrator to reset it.',
+};

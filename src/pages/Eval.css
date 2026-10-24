@@ -1,0 +1,287 @@
+.eval-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(ellipse 60% 40% at 85% 0%, rgba(38, 171, 251, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 10% 100%, rgba(38, 171, 251, 0.1), transparent 70%),
+    var(--ground);
+  padding-inline: 16px;
+  padding-block: 0 32px;
+}
+
+/* Brand lockup centred, language switch at the inline-end. Grid columns follow the text
+   direction, and the row is as wide as the form card so the switch lines up with its edge. */
+.eval-brand {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  padding: 28px 0 20px;
+}
+
+.eval-brand-lockup {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.eval-lang {
+  grid-column: 3;
+  justify-self: end;
+}
+
+.eval-brand-name {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 800;
+  direction: ltr;
+  color: var(--ink);
+}
+
+.eval-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.eval-card {
+  width: 100%;
+  max-width: 600px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  box-shadow: var(--sh-2);
+  padding: 32px;
+}
+
+.eval-card-center {
+  max-width: 460px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 44px 32px;
+  margin-top: 24px;
+}
+
+.eval-card-center h1 {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+}
+
+.eval-card-center p {
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+.eval-state-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 4px;
+}
+
+.eval-state-icon.success {
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.eval-state-icon.danger {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.eval-head {
+  margin-bottom: 26px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eval-eyebrow {
+  display: inline-block;
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--brand-600);
+  background: var(--brand-50);
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  margin-bottom: 10px;
+}
+
+.eval-head h1 {
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.eval-meta {
+  color: var(--muted);
+  font-size: var(--fs-md);
+}
+
+.eval-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.eval-score {
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+
+.eval-score legend {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+.eval-score-label {
+  font-family: var(--font-head);
+  font-size: var(--fs-base);
+  font-weight: 700;
+}
+
+.eval-score-hint {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+.eval-scale {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 4px;
+  direction: ltr;
+}
+
+.eval-scale-btn {
+  height: 40px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.12s, border-color 0.12s, color 0.12s, transform 0.1s;
+}
+
+.eval-scale-btn:hover {
+  border-color: var(--brand-500);
+  color: var(--brand-600);
+}
+
+.eval-scale-btn.is-filled {
+  background: var(--brand-100);
+  border-color: var(--brand-200);
+  color: var(--brand-700);
+}
+
+.eval-scale-btn.is-active {
+  background: var(--brand-600);
+  border-color: var(--brand-600);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.eval-scale-ends {
+  display: flex;
+  justify-content: space-between;
+  direction: ltr;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.eval-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.eval-field label {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.eval-required {
+  color: var(--danger);
+}
+
+.eval-field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  resize: vertical;
+  text-align: start;
+}
+
+.eval-field textarea:focus {
+  outline: none;
+  border-color: var(--brand-500);
+  box-shadow: var(--focus-ring);
+}
+
+.eval-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--r-md);
+  background: var(--danger-soft);
+  color: var(--danger-ink);
+  font-size: var(--fs-sm);
+}
+
+.eval-foot {
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  padding-top: 24px;
+}
+
+@media (max-width: 520px) {
+  /* Too narrow to centre the brand beside the switch: brand at the start, switch at the end. */
+  .eval-brand {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .eval-brand-lockup {
+    grid-column: 1;
+  }
+  .eval-lang {
+    grid-column: 2;
+  }
+  .eval-card {
+    padding: 22px 18px;
+    border-radius: var(--r-lg);
+  }
+  .eval-scale {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .eval-scale-btn {
+    height: 42px;
+  }
+}

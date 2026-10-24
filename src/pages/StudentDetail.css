@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Student detail
+   ========================================================================== */
+
+/* ---------- Header ---------- */
+
+.student-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  min-width: 0;
+}
+
+.student-heading-text {
+  min-width: 0;
+}
+
+.student-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+}
+
+.student-meta-sep {
+  color: var(--muted-soft);
+}
+
+/* ---------- Info tab: definition list ---------- */
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--s-6);
+}
+
+.detail-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+
+/* No rule under the last row (last item, and its row-mate when it starts a row) */
+.detail-grid > div:last-child,
+.detail-grid > div:nth-last-child(2):nth-child(odd) {
+  border-bottom: none;
+}
+
+.detail-grid dt {
+  font-family: var(--font-head);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.detail-grid dd {
+  font-size: var(--fs-base);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.detail-grid-full {
+  grid-column: 1 / -1;
+}
+
+.detail-notes {
+  white-space: pre-line;
+  line-height: 1.7;
+}
+
+/* ---------- Certificates ---------- */
+
+.cert-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-row {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding-block: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+
+.cert-row:first-child {
+  padding-top: 0;
+}
+
+.cert-row:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.cert-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  background: var(--brand-50);
+  color: var(--brand-600);
+  flex-shrink: 0;
+}
+
+.cert-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cert-course {
+  font-family: var(--font-head);
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cert-date {
+  font-size: var(--fs-xs);
+  color: var(--muted);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 680px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Single column: only the very last item drops its rule */
+  .detail-grid > div:nth-last-child(2):nth-child(odd) {
+    border-bottom: 1px solid var(--line);
+  }
+}

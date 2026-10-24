@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: algo-quant-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build && npx prisma generate
+    startCommand: npx prisma db push --accept-data-loss --skip-generate && node dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 15m
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN
+        value: https://algo-quant-erp.vercel.app
+      - key: BOOTSTRAP_ADMIN_EMAIL
+        value: admin@algoquant.local
+      - key: BOOTSTRAP_ADMIN_PASSWORD
+        generateValue: true
+      - key: WEBHOOK_DEFAULT_SECRET
+        generateValue: true
+      # File uploads are non-functional until real S3-compatible creds are set (optional follow-up).
+      - key: S3_ENDPOINT
+        value: http://localhost:9000
+      - key: S3_REGION
+        value: us-east-1
+      - key: S3_BUCKET
+        value: algo-quant
+      - key: S3_ACCESS_KEY
+        value: minioadmin
+      - key: S3_SECRET_KEY
+        value: minioadmin
+      - key: S3_FORCE_PATH_STYLE
+        value: "true"

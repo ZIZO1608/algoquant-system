@@ -1,0 +1,130 @@
+/* Finance page — layout only. Shared primitives (cards, forms, modals,
+   badges, amounts) come from tokens.css and the component stylesheets. */
+
+.finance-kpis {
+  margin-bottom: var(--s-6);
+}
+
+.finance-chart-card {
+  margin-bottom: var(--s-6);
+}
+
+/* Recharts anchors tick text with text-anchor; keeping the SVG itself LTR
+   stops Y-axis labels from spilling into the plot in an RTL document. The
+   HTML tooltip and legend follow the page direction. */
+.finance-chart .recharts-surface {
+  direction: ltr;
+}
+
+.finance-legend-text {
+  color: var(--ink-soft);
+  font-size: var(--fs-sm);
+  margin-inline-start: 4px;
+}
+
+/* "محفظتي" card (non-manager view) */
+.finance-wallet-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  flex-wrap: wrap;
+}
+
+.finance-wallet-main {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.finance-wallet-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--r-md);
+  background: var(--brand-50);
+  color: var(--brand-600);
+  flex-shrink: 0;
+}
+
+.finance-wallet-label {
+  font-family: var(--font-head);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.finance-wallet-value {
+  font-family: var(--font-head);
+  font-size: var(--fs-2xl);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+/* Vertical stack of cards inside a tab */
+.finance-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-4);
+}
+
+.finance-stack .callout {
+  margin-bottom: 0;
+}
+
+/* Flush card with a padded title row above a full-bleed table */
+.finance-table-card .card-header-row {
+  padding: 18px 24px 0;
+  margin-bottom: 14px;
+}
+
+.finance-table-card .data-table th:first-child,
+.finance-table-card .data-table th:last-child {
+  border-radius: 0;
+}
+
+.finance-table-card .card-header-row {
+  flex-wrap: wrap;
+  gap: var(--s-3);
+}
+
+.finance-refund-filters {
+  margin-bottom: 0;
+}
+
+.finance-table-foot {
+  padding: 12px 24px 16px;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+/* "Print the voucher after saving" in the expense / owner withdrawal forms */
+.finance-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  margin-bottom: var(--s-4);
+  font-size: var(--fs-sm);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.finance-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-500);
+}
+
+@media (max-width: 560px) {
+  .finance-table-card .card-header-row {
+    padding: 16px 18px 0;
+  }
+
+  .finance-table-foot {
+    padding: 12px 18px 16px;
+  }
+}

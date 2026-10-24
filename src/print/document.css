@@ -1,0 +1,997 @@
+/*
+ * Printed documents (receipts, vouchers, statements).
+ *
+ * This stylesheet is loaded only inside the print frame (PrintFrame.jsx imports it with ?inline),
+ * never in the app, so it defines its own palette: print is always light, whatever the app theme.
+ * Sizes come from variables that PrintFrame writes for the chosen paper:
+ *   --page-w / --page-h   printed page        --cell-h   height of one copy (half a sheet for 2-up)
+ *   --pad                 page margin         --fs       base text size (pt)
+ *   --lh                  line height         --logo     logo size (mm)
+ */
+
+:root {
+  --ink: #0f1a24;
+  --ink-soft: #3b4a58;
+  --muted: #6b7a88;
+  --line: #d5dde5;
+  --line-soft: #e8edf2;
+  --paper: #ffffff;
+  --accent: #0a78c4;
+  --accent-strong: #26abfb;
+  --accent-soft: #eaf6fe;
+  --danger: #c62828;
+  --success: #1b7a43;
+  --warn: #9a6400;
+  --font-body: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+  --font-head: 'Cairo', 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif;
+  --page-w: 148mm;
+  --page-h: 210mm;
+  --cell-h: 210mm;
+  --pad: 12mm;
+  --fs: 9pt;
+  --lh: 1.5;
+  --logo: 16mm;
+}
+
+.accent-mono {
+  --accent: #111111;
+  --accent-strong: #111111;
+  --accent-soft: #f1f1f1;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs);
+  line-height: var(--lh);
+  font-variant-numeric: tabular-nums;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+}
+
+/* ── Screen preview: pages on a grey desk, scaled to fit the frame ─────────────── */
+
+@media screen {
+  html,
+  body {
+    background: #e4e9ef;
+  }
+
+  .pd-desk {
+    padding: 20px 16px 40px;
+  }
+
+  .pd-viewport {
+    position: relative;
+    margin: 0 auto;
+  }
+
+  .pd-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--page-w);
+    transform-origin: 0 0;
+  }
+
+  .pd-page {
+    background: var(--paper);
+    box-shadow: 0 1px 2px rgba(15, 26, 36, 0.12), 0 8px 24px rgba(15, 26, 36, 0.12);
+    margin-bottom: 18px;
+  }
+
+  .pd-page:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* ── Print: exact pages, nothing else ─────────────────────────────────────────── */
+
+@media print {
+  .pd-desk,
+  .pd-viewport {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .pd-stage {
+    position: static !important;
+    transform: none !important;
+    width: auto !important;
+  }
+
+  .pd-page {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .pd-page:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+}
+
+/* ── Pages ───────────────────────────────────────────────────────────────────── */
+
+.pd-page {
+  width: var(--page-w);
+  height: var(--page-h);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Rolls grow with the document; PrintFrame measures it and sets --page-h for printing. */
+.pd-page.is-roll {
+  height: auto;
+  min-height: 0;
+}
+
+/* Flowing documents (statements on sheets) paginate naturally; @page carries the margins. */
+.pd-page.is-flow {
+  height: auto;
+  overflow: visible;
+}
+
+@media screen {
+  .pd-page.is-flow {
+    min-height: var(--page-h);
+  }
+}
+
+.pd-cell {
+  height: var(--cell-h);
+  overflow: hidden;
+  position: relative;
+}
+
+.pd-page.is-roll .pd-cell,
+.pd-page.is-flow .pd-cell {
+  height: auto;
+  overflow: visible;
+}
+
+/* 2-up: dashed cut line between the two halves */
+.pd-cut {
+  height: 0;
+  border-top: 0.3mm dashed #9aa7b4;
+  position: relative;
+}
+
+.pd-cut::after {
+  content: '✂';
+  position: absolute;
+  top: -2.4mm;
+  inset-inline-start: 4mm;
+  font-size: 9pt;
+  color: #9aa7b4;
+  background: var(--paper);
+  padding: 0 1mm;
+  line-height: 1;
+}
+
+/* ── One copy of a document ──────────────────────────────────────────────────── */
+
+.pd-doc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: var(--pad);
+}
+
+.pd-page.is-roll .pd-doc,
+.pd-page.is-flow .pd-doc {
+  min-height: 0;
+}
+
+.pd-page.is-flow .pd-doc {
+  padding: 0;
+}
+
+@media screen {
+  .pd-page.is-flow .pd-doc {
+    padding: var(--pad);
+  }
+}
+
+.pd-frame .pd-doc-inner {
+  border: 0.35mm solid var(--line);
+  border-radius: 3mm;
+  padding: 1.4em 1.6em;
+}
+
+.pd-doc-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  position: relative;
+}
+
+/* A wide table must never push the document past the page edge. */
+.pd-doc,
+.pd-body {
+  min-width: 0;
+}
+
+.pd-nowrap {
+  white-space: nowrap;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────────── */
+
+.pd-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.2em;
+}
+
+.pd-org {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  min-width: 0;
+}
+
+.pd-logo {
+  width: var(--logo);
+  height: var(--logo);
+  object-fit: contain;
+  flex: none;
+}
+
+.pd-org-text {
+  min-width: 0;
+}
+
+.pd-org-name {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.45em;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.pd-org-tagline {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.92em;
+  line-height: 1.35;
+}
+
+.pd-org-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 3mm;
+  color: var(--muted);
+  font-size: 0.85em;
+  line-height: 1.45;
+  margin-top: 0.5mm;
+}
+
+.pd-ltr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.pd-title-block {
+  text-align: end;
+  flex: none;
+}
+
+.pd-title {
+  display: inline-block;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.55em;
+  line-height: 1.2;
+  color: var(--paper);
+  background: var(--accent);
+  padding: 1mm 3.5mm;
+  border-radius: 1.6mm;
+}
+
+.pd-meta {
+  margin: 0.55em 0 0;
+  display: grid;
+  gap: 0.4mm;
+  font-size: 0.92em;
+}
+
+.pd-meta div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2mm;
+}
+
+.pd-meta dt {
+  color: var(--muted);
+}
+
+.pd-meta dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pd-number {
+  font-family: var(--font-head);
+  letter-spacing: 0.02em;
+}
+
+.pd-copy {
+  display: inline-block;
+  margin-top: 1.5mm;
+  font-size: 0.8em;
+  font-weight: 700;
+  color: var(--accent);
+  border: 0.3mm solid currentColor;
+  border-radius: 10mm;
+  padding: 0.2mm 2.5mm;
+}
+
+.pd-rule {
+  height: 0.7mm;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+  border-radius: 1mm;
+  margin: 1em 0 1.1em;
+}
+
+.accent-mono .pd-rule {
+  background: var(--ink);
+  height: 0.45mm;
+}
+
+/* ── Body ────────────────────────────────────────────────────────────────────── */
+
+.pd-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95em;
+}
+
+.pd-banner {
+  border-radius: 1.8mm;
+  padding: 0.5em 0.9em;
+  font-weight: 700;
+  font-size: 0.95em;
+  border: 0.3mm solid currentColor;
+}
+
+.pd-banner.tone-danger {
+  color: var(--danger);
+  background: #fdecec;
+}
+
+.pd-banner.tone-warn {
+  color: var(--warn);
+  background: #fff5e0;
+}
+
+.pd-banner.tone-success {
+  color: var(--success);
+  background: #e8f6ee;
+}
+
+.pd-fields {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6em 1.6em;
+}
+
+.pd-field {
+  min-width: 0;
+  border-bottom: 0.25mm dotted var(--line);
+  padding-bottom: 0.3em;
+}
+
+.pd-field.is-wide {
+  grid-column: 1 / -1;
+}
+
+.pd-field dt {
+  color: var(--muted);
+  font-size: 0.86em;
+  line-height: 1.3;
+}
+
+.pd-field dd {
+  margin: 0.3mm 0 0;
+  font-weight: 600;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.pd-field dd .pd-sub {
+  display: inline-block;
+  color: var(--muted);
+  font-weight: 500;
+  margin-inline-start: 2mm;
+}
+
+.pd-amount {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.3em 1.2em;
+  background: var(--accent-soft);
+  border: 0.35mm solid var(--accent);
+  border-radius: 2.4mm;
+  padding: 0.8em 1.25em;
+}
+
+.pd-amount-label {
+  font-family: var(--font-head);
+  font-weight: 800;
+  color: var(--accent);
+  font-size: 1.05em;
+}
+
+.pd-amount-value {
+  text-align: end;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.9em;
+  line-height: 1.15;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.pd-amount-value small {
+  font-size: 0.5em;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-inline-start: 1mm;
+}
+
+.pd-amount-words {
+  grid-column: 1 / -1;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: 0.95em;
+  border-top: 0.25mm dashed var(--accent);
+  padding-top: 0.4em;
+}
+
+/* The gap shows the container's line colour, so the grid lines stay clean however it wraps. */
+.pd-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(24mm, 1fr));
+  gap: 0.3mm;
+  background: var(--line);
+  border: 0.3mm solid var(--line);
+  border-radius: 2mm;
+  overflow: hidden;
+}
+
+.is-narrow .pd-summary {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.pd-sum {
+  padding: 0.5em 0.75em;
+  min-width: 0;
+  background: var(--paper);
+}
+
+.pd-sum span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82em;
+  line-height: 1.3;
+}
+
+.pd-sum strong {
+  display: block;
+  font-weight: 700;
+  font-size: 1em;
+  white-space: nowrap;
+}
+
+.pd-sum.is-key {
+  background: var(--accent-soft);
+}
+
+.pd-sum.is-key strong {
+  color: var(--accent);
+}
+
+.pd-sum.is-ok strong {
+  color: var(--success);
+}
+
+.pd-sum.is-due strong {
+  color: var(--danger);
+}
+
+.pd-note {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92em;
+  white-space: pre-line;
+}
+
+.pd-note b {
+  color: var(--ink);
+}
+
+.pd-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1mm 4mm;
+  color: var(--ink-soft);
+  font-size: 0.84em;
+}
+
+.pd-steps span b {
+  color: var(--ink);
+}
+
+/* ── Signatures and footer ───────────────────────────────────────────────────── */
+
+.pd-spacer {
+  flex: 1;
+  min-height: 1.2em;
+}
+
+.pd-signs {
+  display: grid;
+  grid-template-columns: repeat(var(--sign-cols, 2), minmax(0, 1fr));
+  gap: 1.8em;
+  margin-top: 1.5em;
+  break-inside: avoid;
+}
+
+.pd-sign {
+  text-align: center;
+  min-width: 0;
+}
+
+.pd-sign-line {
+  height: 3.4em;
+  border-bottom: 0.3mm solid var(--ink-soft);
+}
+
+.pd-sign-label {
+  margin-top: 1mm;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+
+.pd-sign-name {
+  color: var(--muted);
+  font-size: 0.82em;
+}
+
+.pd-foot {
+  margin-top: 1.2em;
+  padding-top: 0.6em;
+  border-top: 0.3mm solid var(--line-soft);
+  color: var(--muted);
+  font-size: 0.8em;
+  line-height: 1.45;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6mm;
+  break-inside: avoid;
+}
+
+.pd-foot-main {
+  color: var(--ink-soft);
+  font-weight: 600;
+  white-space: pre-line;
+}
+
+.pd-terms {
+  white-space: pre-line;
+}
+
+.pd-foot-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 3mm;
+  flex-wrap: wrap;
+}
+
+/* ── Watermark (voided, rejected, not processed) ─────────────────────────────── */
+
+.pd-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pd-watermark span {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 5.2em;
+  color: var(--danger);
+  opacity: 0.13;
+  transform: rotate(-24deg);
+  border: 1.2mm solid currentColor;
+  border-radius: 4mm;
+  padding: 0 6mm;
+  white-space: nowrap;
+}
+
+.pd-watermark.is-warn span {
+  color: var(--warn);
+}
+
+/* ── Statement ───────────────────────────────────────────────────────────────── */
+
+.pd-party {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 4mm;
+  background: var(--accent-soft);
+  border-radius: 2.4mm;
+  padding: 3mm 4mm;
+}
+
+.pd-party-name {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.35em;
+  line-height: 1.25;
+}
+
+.pd-party-lines {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4mm;
+  color: var(--ink-soft);
+  font-size: 0.92em;
+}
+
+.pd-chip {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 0.85em;
+  border-radius: 10mm;
+  padding: 0.3mm 2.6mm;
+  border: 0.3mm solid currentColor;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.pd-chip.tone-success { color: var(--success); }
+.pd-chip.tone-danger { color: var(--danger); }
+.pd-chip.tone-warning { color: var(--warn); }
+.pd-chip.tone-muted,
+.pd-chip.tone-neutral { color: var(--ink-soft); }
+
+.pd-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2.5mm;
+}
+
+.pd-tile {
+  border: 0.3mm solid var(--line);
+  border-radius: 2mm;
+  padding: 2mm 3mm;
+}
+
+.pd-tile span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.84em;
+}
+
+.pd-tile strong {
+  display: block;
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.2em;
+  white-space: nowrap;
+}
+
+.pd-tile.is-due strong {
+  color: var(--danger);
+}
+
+.pd-tile.is-ok strong {
+  color: var(--success);
+}
+
+.pd-h {
+  font-family: var(--font-head);
+  font-weight: 800;
+  font-size: 1.1em;
+  margin: 2mm 0 0;
+  color: var(--accent);
+  break-after: avoid;
+}
+
+.pd-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92em;
+}
+
+.pd-table th {
+  text-align: start;
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: var(--line-soft);
+  padding: 1.4mm 2mm;
+  border-bottom: 0.35mm solid var(--line);
+  white-space: nowrap;
+}
+
+.pd-table td {
+  padding: 1.3mm 2mm;
+  border-bottom: 0.25mm solid var(--line-soft);
+  vertical-align: top;
+}
+
+.pd-table tr {
+  break-inside: avoid;
+}
+
+.pd-table .num {
+  text-align: end;
+  white-space: nowrap;
+}
+
+.pd-table tfoot td {
+  font-weight: 800;
+  border-top: 0.35mm solid var(--line);
+  border-bottom: 0;
+  background: var(--accent-soft);
+}
+
+.pd-muted {
+  color: var(--muted);
+}
+
+/* Stacked lines (statement on a receipt roll) */
+.pd-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.pd-list li {
+  padding: 1.2mm 0;
+  border-bottom: 0.25mm dashed var(--line);
+  break-inside: avoid;
+}
+
+.pd-list-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 2mm;
+}
+
+.pd-list-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 2mm;
+  font-size: 0.95em;
+}
+
+.pd-list-total {
+  margin-top: 1.5mm;
+  padding: 1mm 0;
+  border-top: 0.35mm solid var(--ink);
+  font-weight: 800;
+}
+
+.pd-due {
+  color: var(--danger);
+}
+
+.pd-ok {
+  color: var(--success);
+}
+
+/* ── Compact (A5, A6, half sheets) ───────────────────────────────────────────── */
+
+.fmt-compact .pd-rule {
+  margin: 0.8em 0 0.9em;
+}
+
+.fmt-compact .pd-body {
+  gap: 0.75em;
+}
+
+.fmt-compact .pd-tiles {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fmt-compact .pd-sign-line {
+  height: 2.8em;
+}
+
+/* ── Receipt roll (thermal, ≤ 90 mm): one centred column ─────────────────────── */
+
+.fmt-roll .pd-head {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5mm;
+}
+
+.fmt-roll .pd-org {
+  flex-direction: column;
+  gap: 1mm;
+}
+
+.fmt-roll .pd-org-lines {
+  justify-content: center;
+}
+
+.fmt-roll .pd-title-block {
+  text-align: center;
+}
+
+.fmt-roll .pd-title {
+  color: var(--ink);
+  background: none;
+  border-top: 0.3mm solid var(--ink);
+  border-bottom: 0.3mm solid var(--ink);
+  border-radius: 0;
+  padding: 0.6mm 2mm;
+}
+
+.fmt-roll .pd-meta div {
+  justify-content: center;
+}
+
+.fmt-roll .pd-rule {
+  background: none;
+  height: 0;
+  border-top: 0.3mm dashed var(--ink);
+  margin: 0.7em 0;
+}
+
+.fmt-roll .pd-fields {
+  grid-template-columns: 1fr;
+  gap: 0.8mm;
+}
+
+.fmt-roll .pd-field {
+  display: flex;
+  justify-content: space-between;
+  gap: 2mm;
+  border-bottom: 0;
+  padding: 0;
+}
+
+.fmt-roll .pd-field dt {
+  flex: none;
+  white-space: nowrap;
+}
+
+.fmt-roll .pd-field dd {
+  margin: 0;
+  min-width: 0;
+  text-align: end;
+}
+
+.fmt-roll .pd-signs {
+  margin-top: 1em;
+}
+
+.fmt-roll .pd-field.is-wide {
+  flex-direction: column;
+  gap: 0;
+}
+
+.fmt-roll .pd-field.is-wide dd {
+  text-align: start;
+}
+
+.fmt-roll .pd-amount {
+  grid-template-columns: 1fr;
+  text-align: center;
+  background: none;
+  border-radius: 0;
+  border-width: 0.35mm 0;
+  border-color: var(--ink);
+  padding: 1.6mm 0;
+}
+
+.fmt-roll .pd-amount-label,
+.fmt-roll .pd-amount-value {
+  text-align: center;
+  color: var(--ink);
+}
+
+.fmt-roll .pd-amount-words {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.fmt-roll .pd-summary {
+  grid-template-columns: 1fr;
+  gap: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+}
+
+.fmt-roll .pd-sum {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.3mm 0;
+}
+
+.fmt-roll .pd-sum.is-key {
+  background: none;
+  border-top: 0.25mm dashed var(--ink);
+  border-bottom: 0.25mm dashed var(--ink);
+}
+
+.fmt-roll .pd-signs {
+  grid-template-columns: 1fr;
+  gap: 3mm;
+}
+
+.fmt-roll .pd-sign-line {
+  height: 2.6em;
+}
+
+.fmt-roll .pd-foot {
+  text-align: center;
+  align-items: center;
+}
+
+.fmt-roll .pd-foot-meta {
+  justify-content: center;
+}
+
+.fmt-roll .pd-tiles {
+  grid-template-columns: 1fr 1fr;
+}
+
+.fmt-roll .pd-party {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: none;
+  padding: 0;
+}
+
+.fmt-roll .pd-table th,
+.fmt-roll .pd-table td {
+  padding: 0.8mm 0.6mm;
+}
+
+.fmt-roll .pd-frame .pd-doc-inner,
+.fmt-roll.pd-frame .pd-doc-inner {
+  border: 0;
+  padding: 0;
+}
+
+.fmt-roll .pd-watermark span {
+  font-size: 3.2em;
+}
