@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import cors from 'cors';
 import helmet from 'helmet';
 import { config, corsOriginCallback } from './config/index.js';
@@ -10,11 +11,12 @@ export function createApp() {
   const app = express();
 
   if (config.env === 'production') {
-    // Number of proxies in front of the API (2 on Coolify: Traefik, then the web nginx).
+    // Number of proxies in front of the API: 1 behind Coolify's Traefik, 2 with the nginx web container in front.
     app.set('trust proxy', config.trustProxyHops);
   }
 
-  app.use(helmet());
+  // No CSP: the web app uses an inline theme script and Google Fonts.
+  app.use(helmet({ contentSecurityPolicy: false }));
   app.use(cors({ origin: corsOriginCallback, credentials: true }));
   app.use(express.json({ limit: '2mb' }));
   app.use(paramsMiddleware);
@@ -25,6 +27,20 @@ export function createApp() {
   });
 
   app.use('/api/v1', apiRoutes);
+
+  // Single-container deploys serve the built web app; unknown paths fall back to the SPA.
+  if (config.staticDir) {
+    const staticDir = path.resolve(config.staticDir);
+    app.use(
+      '/assets',
+      express.static(path.join(staticDir, 'assets'), { immutable: true, maxAge: '1y' })
+    );
+    app.use(express.static(staticDir, { index: false }));
+    app.get(/^\/(?!api\/|socket\.io\/).*/, (_req, res) => {
+      res.setHeader('Cache-Control', 'no-cache');
+      res.sendFile(path.join(staticDir, 'index.html'));
+    });
+  }
 
   app.use(errorHandler);
 

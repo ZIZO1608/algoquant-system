@@ -43,6 +43,9 @@ export const config = {
   env,
   port: parseInt(process.env.PORT || '3001', 10),
   trustProxyHops: parseInt(process.env.TRUST_PROXY_HOPS || '1', 10),
+  // Single-container deploys: built web app to serve, and a disk folder for uploads.
+  staticDir: process.env.STATIC_DIR,
+  storageDir: process.env.STORAGE_DIR,
   databaseUrl: process.env.DATABASE_URL!,
   jwt: {
     secret: jwtSecret,

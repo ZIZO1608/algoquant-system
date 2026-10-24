@@ -9,6 +9,10 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { config } from '../config/index.js';
 import { v4 as uuidv4 } from 'uuid';
+import { deleteDiskFile, signedDiskUrl, writeDiskFile } from './disk-storage.js';
+
+// STORAGE_DIR switches uploads to the local disk instead of S3.
+const useDisk = Boolean(config.storageDir);
 
 function createClient(endpoint: string | undefined): S3Client {
   return new S3Client({
@@ -50,8 +54,12 @@ export async function uploadFile(
   mime: string,
   purpose: string
 ): Promise<{ storageKey: string; bucket: string; size: number }> {
-  await ensureBucket();
   const storageKey = `${purpose}/${uuidv4()}`;
+  if (useDisk) {
+    await writeDiskFile(storageKey, buffer);
+    return { storageKey, bucket: 'disk', size: buffer.length };
+  }
+  await ensureBucket();
   await client.send(
     new PutObjectCommand({
       Bucket: config.s3.bucket,
@@ -64,6 +72,7 @@ export async function uploadFile(
 }
 
 export async function getPresignedUrl(storageKey: string, expiresIn = 3600): Promise<string> {
+  if (useDisk) return signedDiskUrl(storageKey, expiresIn);
   const command = new GetObjectCommand({
     Bucket: config.s3.bucket,
     Key: storageKey,
@@ -72,6 +81,7 @@ export async function getPresignedUrl(storageKey: string, expiresIn = 3600): Pro
 }
 
 export async function deleteFile(storageKey: string): Promise<void> {
+  if (useDisk) return deleteDiskFile(storageKey);
   await client.send(
     new DeleteObjectCommand({
       Bucket: config.s3.bucket,

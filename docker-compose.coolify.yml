@@ -6,7 +6,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: deploy/web.Dockerfile
     depends_on:
       - api
     restart: unless-stopped

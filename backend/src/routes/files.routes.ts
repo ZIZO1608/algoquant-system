@@ -4,6 +4,8 @@ import { authenticate, requirePrivileges } from '../middleware/auth.middleware.j
 import { hasAnyPrivilege } from '../services/auth.service.js';
 import * as fileService from '../services/file.service.js';
 import { ForbiddenError, ServiceUnavailableError } from '../lib/errors.js';
+import { verifyDiskUrl } from '../lib/disk-storage.js';
+import { prisma } from '../lib/prisma.js';
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 20 * 1024 * 1024 } });
 const router = Router();
@@ -27,6 +29,28 @@ function isStorageUnavailable(err: unknown): boolean {
     msg.includes('other side closed')
   );
 }
+
+// Signed download links for disk storage. The signature is the authorization (like a
+// presigned S3 URL), so this sits before authenticate: browsers open it without a token.
+router.get('/raw', async (req, res, next) => {
+  try {
+    const key = String(req.query.key || '');
+    const filePath = verifyDiskUrl(key, String(req.query.exp || ''), String(req.query.sig || ''));
+    if (!filePath) {
+      return res
+        .status(403)
+        .json({ error: { code: 'INVALID_LINK', message: 'Link expired or invalid' } });
+    }
+    const file = await prisma.fileObject.findFirst({ where: { storageKey: key } });
+    if (file?.mime) res.type(file.mime);
+    res.setHeader('Cache-Control', 'private, max-age=3600');
+    res.sendFile(filePath, (err) => {
+      if (err && !res.headersSent) res.status(404).end();
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 router.use(authenticate);
 

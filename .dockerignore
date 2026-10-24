@@ -1,6 +1,9 @@
 node_modules
 dist
-backend
+backend/node_modules
+backend/dist
+backend/tests
+backend/docs
 .local
 user-guides
 docs
@@ -9,3 +12,5 @@ docs
 *.log
 .env
 .env.*
+backend/.env
+backend/.env.*
