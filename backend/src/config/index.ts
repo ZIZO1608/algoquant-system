@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,8 +10,15 @@ const DEV_WEBHOOK_DEFAULT_SECRET = 'change-me-webhook-secret';
 const env = process.env.NODE_ENV || 'development';
 const jwtSecret = process.env.JWT_SECRET || DEV_JWT_SECRET;
 const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET || DEV_JWT_REFRESH_SECRET;
-const bootstrapAdminPassword =
-  process.env.BOOTSTRAP_ADMIN_PASSWORD || DEV_BOOTSTRAP_ADMIN_PASSWORD;
+const envAdminPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD;
+// Only the seed reads this. In production a missing or well-known admin password is replaced
+// by a random one, which the seed prints once, instead of stopping the whole app.
+const adminPasswordGenerated =
+  env === 'production' &&
+  (!envAdminPassword || envAdminPassword === DEV_BOOTSTRAP_ADMIN_PASSWORD);
+const bootstrapAdminPassword = adminPasswordGenerated
+  ? randomBytes(12).toString('base64url')
+  : envAdminPassword || DEV_BOOTSTRAP_ADMIN_PASSWORD;
 const webhookDefaultSecret =
   process.env.WEBHOOK_DEFAULT_SECRET || DEV_WEBHOOK_DEFAULT_SECRET;
 
@@ -19,12 +27,6 @@ if (env === 'production') {
   if (!process.env.JWT_SECRET || jwtSecret === DEV_JWT_SECRET) unsafe.push('JWT_SECRET');
   if (!process.env.JWT_REFRESH_SECRET || jwtRefreshSecret === DEV_JWT_REFRESH_SECRET) {
     unsafe.push('JWT_REFRESH_SECRET');
-  }
-  if (
-    !process.env.BOOTSTRAP_ADMIN_PASSWORD ||
-    bootstrapAdminPassword === DEV_BOOTSTRAP_ADMIN_PASSWORD
-  ) {
-    unsafe.push('BOOTSTRAP_ADMIN_PASSWORD');
   }
   if (
     !process.env.WEBHOOK_DEFAULT_SECRET ||
@@ -70,6 +72,7 @@ export const config = {
   bootstrap: {
     adminEmail: process.env.BOOTSTRAP_ADMIN_EMAIL || 'admin@algoquant.local',
     adminPassword: bootstrapAdminPassword,
+    adminPasswordGenerated,
   },
   webhookDefaultSecret,
 };

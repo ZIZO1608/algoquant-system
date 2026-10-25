@@ -97,6 +97,21 @@ async function main() {
     await prisma.wallet.create({ data: { ownerId: admin.id } });
 
     console.log(`Bootstrap admin created: ${config.bootstrap.adminEmail}`);
+    if (config.bootstrap.adminPasswordGenerated) {
+      const line = '='.repeat(60);
+      console.log(
+        [
+          '',
+          line,
+          '  ADMIN LOGIN (BOOTSTRAP_ADMIN_PASSWORD was missing or unsafe)',
+          `  Email:    ${config.bootstrap.adminEmail}`,
+          `  Password: ${config.bootstrap.adminPassword}`,
+          '  Shown once. Log in and change it.',
+          line,
+          '',
+        ].join('\n')
+      );
+    }
   }
 
   // Demo tracks

@@ -471,7 +471,10 @@ async function main() {
   console.log('Demo seed completed.');
   console.log('');
   console.log('Login credentials for the demo:');
-  console.log(`  Admin:      ${config.bootstrap.adminEmail} / ${config.bootstrap.adminPassword}`);
+  const adminPassword = config.bootstrap.adminPasswordGenerated
+    ? '(generated, see ADMIN LOGIN above)'
+    : config.bootstrap.adminPassword;
+  console.log(`  Admin:      ${config.bootstrap.adminEmail} / ${adminPassword}`);
   console.log(`  Sales:      reem.sales@algoquant.local / ${DEMO_PASSWORD}`);
   console.log(`  Media:      karim.media@algoquant.local / ${DEMO_PASSWORD}`);
   console.log(`  Operation:  sara.ops@algoquant.local / ${DEMO_PASSWORD}`);
